@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Library.Helpers"
+             xmlns:viewmodels="clr-namespace:Library.ViewModels"
+             x:Class="Library.Views.RegisterPage"
+             x:DataType="viewmodels:RegisterViewModel"
+             Title="">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NotEmptyConverter x:Key="NotEmptyConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="15" Padding="20">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Create Account" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" />
+                <Label Text="Join our library system" 
+                       FontSize="14" 
+                       HorizontalOptions="Center" 
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red" 
+                   IsVisible="{Binding ErrorMessage.Length, Converter={StaticResource NotEmptyConverter}}"
+                   HorizontalOptions="Center" />
+
+            <!-- Form -->
+            <VerticalStackLayout Spacing="10">
+                <!-- First Name -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="First Name" FontSize="14" />
+                    <Entry Text="{Binding FirstName}" 
+                           Placeholder="Enter first name" />
+                </VerticalStackLayout>
+               
+             
+
+                <!-- Last Name -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="Last Name" FontSize="14" />
+                    <Entry Text="{Binding LastName}" 
+                           Placeholder="Enter last name" />
+                </VerticalStackLayout>
+
+                <!-- Email -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="Email" FontSize="14" />
+                    <Entry Text="{Binding Email}" 
+                           Placeholder="you@example.com" 
+                           Keyboard="Email" />
+                </VerticalStackLayout>
+
+                <!-- Phone -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="Phone" FontSize="14" />
+                    <Entry Text="{Binding Phone}" 
+                           Placeholder="+92 456-7890" 
+                           Keyboard="Telephone" />
+                </VerticalStackLayout>
+
+                <!-- Date of Birth -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="Date of Birth" FontSize="14" />
+                    <DatePicker Date="{Binding DateOfBirth}" />
+                </VerticalStackLayout>
+
+                <!-- Password -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="Password" FontSize="14" />
+                
+                    <Grid ColumnDefinitions="*,Auto"
+      VerticalOptions="Center">
+
+                        <!-- Password Entry -->
+                        <Entry
+        Text="{Binding Password}"
+        IsPassword="{Binding IsPasswordHidden}"
+        Placeholder="Password"
+        HeightRequest="50" />
+
+                        <!-- Eye Button -->
+                        <ImageButton
+        Grid.Column="1"
+        Source="{Binding EyeIcon}"
+        BackgroundColor="Transparent"
+        HeightRequest="24"
+        WidthRequest="24"
+        Command="{Binding TogglePasswordCommand}"
+        VerticalOptions="Center"
+        HorizontalOptions="End"
+        Margin="10,0" />
+
+                    </Grid>
+                </VerticalStackLayout>
+
+                <!-- Confirm Password -->
+                <VerticalStackLayout Spacing="5" WidthRequest="500">
+                    <Label Text="Confirm Password" FontSize="14" />
+                    <Grid ColumnDefinitions="*,Auto"
+      VerticalOptions="Center">
+
+                        <!-- Password Entry -->
+                        <Entry
+        Text="{Binding ConfirmPassword}"
+        IsPassword="{Binding IsPasswordHidden}"
+        Placeholder="Password"
+        HeightRequest="50" />
+
+                        <!-- Eye Button -->
+                        <ImageButton
+        Grid.Column="1"
+        Source="{Binding EyeIcon}"
+        BackgroundColor="Transparent"
+        HeightRequest="24"
+        WidthRequest="24"
+        Command="{Binding TogglePasswordCommand}"
+        VerticalOptions="Center"
+        HorizontalOptions="End"
+        Margin="10,0" />
+
+                    </Grid>
+
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+
+            <!-- Register Button -->
+            <Button Text="Register" 
+                    Command="{Binding RegisterCommand}" 
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                    BackgroundColor="{StaticResource Primary}" 
+                    TextColor="White" 
+                    HeightRequest="50" 
+                    CornerRadius="10" 
+                    Margin="0,20,0,0" AutomationProperties.IsInAccessibleTree="False" 
+                    WidthRequest="500"/>
+            <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="True" />
+
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                               IsVisible="{Binding IsLoading}" 
+                               HorizontalOptions="Center" />
+
+            <!-- Login Link -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,20,0,0">
+                <Label Text="Already have an account?" />
+                
+              
+            </HorizontalStackLayout>
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5" Margin="0,20,0,0">
+                <Button Text="Sign In" 
+        Command="{Binding GoToLoginCommand}" 
+        TextColor="{StaticResource Primary}" 
+        BackgroundColor="Transparent" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

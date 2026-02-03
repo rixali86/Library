@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Library.Views.DashboardPage"
+             Title="">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="20" >
+
+            <!-- Welcome Message -->
+            <Label Text="Welcome to Library Dashboard!" 
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center" />
+
+            <!-- User Info -->
+            <Frame BackgroundColor="Aqua" Padding="15">
+                <VerticalStackLayout>
+                    <Label Text="Library Management System" 
+                           FontSize="18"
+                           FontAttributes="Bold" />
+                    <Label Text="Manage books, members, and transactions" 
+                           FontSize="14" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Quick Actions -->
+            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" 
+                  ColumnSpacing="10" RowSpacing="10">
+
+                <!-- Row 1 -->
+                <Frame Grid.Row="0" Grid.Column="0" 
+                       BackgroundColor="#E8F5E9" Padding="15">
+                    <VerticalStackLayout>
+                        <Label Text="📚" FontSize="30" HorizontalOptions="Center" />
+                        <Label Text="Books" FontSize="16" FontAttributes="Bold" 
+                               HorizontalOptions="Center" />
+                        <Label Text="Manage library books" FontSize="12" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                    <Frame.GestureRecognizers>
+                        <TapGestureRecognizer 
+                            Command="{Binding NavigateToBooksCommand}" />
+                    </Frame.GestureRecognizers>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="1" 
+                       BackgroundColor="#E3F2FD" Padding="15">
+                    <VerticalStackLayout>
+                        <Label Text="👥" FontSize="30" HorizontalOptions="Center" />
+                        <Label Text="Members" FontSize="16" FontAttributes="Bold" 
+                               HorizontalOptions="Center" />
+                        <Label Text="Manage library members" FontSize="12" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <!-- Row 2 -->
+                <Frame Grid.Row="1" Grid.Column="0" 
+                       BackgroundColor="#FFF3E0" Padding="15">
+                    <VerticalStackLayout>
+                        <Label Text="📖" FontSize="30" HorizontalOptions="Center" />
+                        <Label Text="Issued Books" FontSize="16" FontAttributes="Bold" 
+                               HorizontalOptions="Center" />
+                        <Label Text="View issued books" FontSize="12" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Row="1" Grid.Column="1" 
+                       BackgroundColor="#FCE4EC" Padding="15">
+                    <VerticalStackLayout>
+                        <Label Text="⚙️" FontSize="30" HorizontalOptions="Center" />
+                        <Label Text="Settings" FontSize="16" FontAttributes="Bold" 
+                               HorizontalOptions="Center" />
+                        <Label Text="App settings" FontSize="12" 
+                               HorizontalOptions="Center" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+
+            <!-- Logout Button -->
+            <Button Text="Logout" 
+                    BackgroundColor="#FF6B6B"
+                    TextColor="White"
+                    Command="{Binding LogoutCommand}"
+                    Margin="0,30,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,235 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Library</name>
+    </assembly>
+    <members>
+        <member name="T:Library.ViewModels.DashboardViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.CurrentLoans">
+            <inheritdoc cref="F:Library.ViewModels.DashboardViewModel.currentLoans"/>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.UpcomingEvents">
+            <inheritdoc cref="F:Library.ViewModels.DashboardViewModel.upcomingEvents"/>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.IsLoading">
+            <inheritdoc cref="F:Library.ViewModels.DashboardViewModel.isLoading"/>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.UserName">
+            <inheritdoc cref="F:Library.ViewModels.DashboardViewModel.userName"/>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.loadDataCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.LoadDataCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.LoadDataCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.LoadDataAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.searchBooksCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.SearchBooksCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.SearchBooksCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.SearchBooksAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.viewBranchesCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.ViewBranchesCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.ViewBranchesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.ViewBranchesAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.viewEventsCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.ViewEventsCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.ViewEventsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.ViewEventsAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.logoutCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.LogoutCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.LogoutCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.LogoutAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.returnBookCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.ReturnBookCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.ReturnBookCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.ReturnBookAsync(Library.Models.Loan)"/>.</summary>
+        </member>
+        <member name="T:Library.ViewModels.LoginViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.Email">
+            <inheritdoc cref="F:Library.ViewModels.LoginViewModel.email"/>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.Password">
+            <inheritdoc cref="F:Library.ViewModels.LoginViewModel.password"/>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.IsLoading">
+            <inheritdoc cref="F:Library.ViewModels.LoginViewModel.isLoading"/>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.ErrorMessage">
+            <inheritdoc cref="F:Library.ViewModels.LoginViewModel.errorMessage"/>
+        </member>
+        <member name="F:Library.ViewModels.LoginViewModel.loginCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.LoginViewModel.LoginCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.LoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.LoginViewModel.LoginAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.LoginViewModel.goToRegisterCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.LoginViewModel.GoToRegisterCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.GoToRegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.LoginViewModel.GoToRegisterAsync"/>.</summary>
+        </member>
+        <member name="T:Library.ViewModels.RegisterViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.FirstName">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.firstName"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.LastName">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.lastName"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.Email">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.email"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.Phone">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.phone"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.DateOfBirth">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.dateOfBirth"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.Password">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.password"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.ConfirmPassword">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.confirmPassword"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.IsLoading">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.isLoading"/>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.ErrorMessage">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.errorMessage"/>
+        </member>
+        <member name="F:Library.ViewModels.RegisterViewModel.registerCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.RegisterViewModel.RegisterCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.RegisterCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.RegisterViewModel.Register"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.RegisterViewModel.goToLoginCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.RegisterViewModel.GoToLoginCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.GoToLoginCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.RegisterViewModel.GoToLogin"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.RegisterViewModel.clearFormCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.RegisterViewModel.ClearFormCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.ClearFormCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.RegisterViewModel.ClearForm"/>.</summary>
+        </member>
+        <member name="T:Library.Resource">
+            <summary>
+            Android Resource Designer class.
+            Exposes the Android Resource designer assembly into the project Namespace.
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentLoans">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentLoans" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UpcomingEvents">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UpcomingEvents" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Email">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Email" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Password">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FirstName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FirstName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LastName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LastName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Phone">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Phone" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.DateOfBirth">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "DateOfBirth" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentLoans">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentLoans" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UpcomingEvents">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UpcomingEvents" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UserName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UserName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Email">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Email" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Password">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Password" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrorMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FirstName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FirstName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LastName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LastName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Phone">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Phone" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.DateOfBirth">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "DateOfBirth" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+    </members>
+</doc>

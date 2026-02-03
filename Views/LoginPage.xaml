@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:Library.Helpers"
+             xmlns:viewmodels="clr-namespace:Library.ViewModels"
+             x:Class="Library.Views.LoginPage"
+             x:DataType="viewmodels:LoginViewModel"
+             Title="Login">
+
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:NotEmptyConverter x:Key="NotEmptyConverter" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30,60,30,30">
+
+            <!-- Header -->
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Global Library System" 
+                       FontSize="28" 
+                       FontAttributes="Bold" 
+                       HorizontalOptions="Center" />
+                <Label Text="Sign in to your account" 
+                       FontSize="16" 
+                       HorizontalOptions="Center" 
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <!-- Error Message -->
+            <Label Text="{Binding ErrorMessage}" 
+                   TextColor="Red" 
+                   IsVisible="{Binding ErrorMessage.Length, Converter={StaticResource NotEmptyConverter}}" />
+
+            <!-- Email Field -->
+            <VerticalStackLayout  Spacing="5" WidthRequest="500" >
+                <Label Text="" FontSize="14"  />
+                <Entry Text="{Binding Email}"  
+                       Placeholder="Email or Phone Number " 
+                       Keyboard="Email"
+                       
+                       WidthRequest="500"/>
+            </VerticalStackLayout>
+
+            <!-- Password Field -->
+            <VerticalStackLayout Spacing="5" WidthRequest="500">
+                <Label Text="" FontSize="14" />
+                <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+    <!-- Password Entry -->
+    <Entry
+        Text="{Binding Password}"
+        IsPassword="{Binding IsPasswordHidden}"
+        Placeholder="Password"
+        HeightRequest="50"
+        Keyboard="Text" />
+
+    <!-- Eye Button -->
+    <ImageButton
+        Grid.Column="1"
+        Source="{Binding EyeIcon}"
+        BackgroundColor="Transparent"
+        HeightRequest="24"
+        WidthRequest="24"
+        Command="{Binding TogglePasswordCommand}"
+        VerticalOptions="Center"
+        HorizontalOptions="End"
+        Margin="10,0"/>
+</Grid>
+
+            </VerticalStackLayout>
+            <Label Text="{Binding ErrorMessage}" TextColor="Red" IsVisible="True" WidthRequest="500" />
+
+            <!-- Login Button -->
+            <Button Text="Sign In" 
+                    Command="{Binding LoginCommand}" 
+                    IsEnabled="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                    BackgroundColor="{StaticResource Primary}" 
+                    TextColor="White" 
+                    HeightRequest="50" 
+                    CornerRadius="10" 
+                    WidthRequest="500" />
+
+            <!-- Loading Indicator -->
+            <ActivityIndicator IsRunning="{Binding IsLoading}" 
+                               IsVisible="{Binding IsLoading}" 
+                               HorizontalOptions="Center" />
+
+            <!-- Register Link -->
+            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                <Label Text="Don't have an account?" />
+               
+            </HorizontalStackLayout>
+            <HorizontalStackLayout  HorizontalOptions="Center">
+                
+                    <Button Text="Register"
+                   BorderWidth="1"
+         Command="{Binding GoToRegisterCommand}" 
+         TextColor="{StaticResource Primary}" 
+          WidthRequest="150"
+         BackgroundColor="Transparent" BorderColor="Black" />
+
+            </HorizontalStackLayout>
+            
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
