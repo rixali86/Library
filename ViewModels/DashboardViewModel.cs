@@ -81,6 +81,15 @@ namespace Library.ViewModels
         {
             await Shell.Current.GoToAsync("//Events");
         }
+        [RelayCommand]
+        private async Task ViewAppSetting()
+        {
+            await Shell.Current.GoToAsync("//Setting");
+        }
+       
+        
+      
+
 
         [RelayCommand]
         private async Task LogoutAsync()

@@ -2,91 +2,516 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Library.Views.DashboardPage"
-             Title="">
+             Title="Dashboard"
+             Shell.NavBarIsVisible="True">
 
-    <ScrollView>
-        <VerticalStackLayout Spacing="20" Padding="20" >
+    <RefreshView IsRefreshing="{Binding IsLoading}"
+                 Command="{Binding LoadDataCommand}">
+        <ScrollView>
+            <VerticalStackLayout Spacing="0" Padding="0">
 
-            <!-- Welcome Message -->
-            <Label Text="Welcome to Library Dashboard!" 
-                   FontSize="24"
-                   FontAttributes="Bold"
-                   HorizontalOptions="Center" />
+                <!-- Header Section with Gradient Background -->
+                <Grid BackgroundColor="#6366F1" 
+                      Padding="20,30,20,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
 
-            <!-- User Info -->
-            <Frame BackgroundColor="Aqua" Padding="15">
-                <VerticalStackLayout>
-                    <Label Text="Library Management System" 
-                           FontSize="18"
-                           FontAttributes="Bold" />
-                    <Label Text="Manage books, members, and transactions" 
-                           FontSize="14" />
+                    <VerticalStackLayout Grid.Row="0" Spacing="8">
+                        <Label Text="{Binding UserName, StringFormat='Hello, {0}! 👋'}" 
+                               FontSize="28"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Welcome back to your library" 
+                               FontSize="14"
+                               TextColor="White"
+                               Opacity="0.9" />
+                    </VerticalStackLayout>
+
+                    <!-- Stats Cards -->
+                    <Grid Grid.Row="1" 
+                          Margin="0,20,0,0"
+                          ColumnDefinitions="*,*"
+                          ColumnSpacing="15">
+
+                        <!-- Active Loans Card -->
+                        <Frame Grid.Column="0"
+                               BackgroundColor="White"
+                               Padding="15"
+                               CornerRadius="12"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="📚" FontSize="24" />
+                                <Label Text="{Binding CurrentLoans.Count}" 
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#6366F1" />
+                                <Label Text="Active Loans" 
+                                       FontSize="12"
+                                       TextColor="#64748B" />
+                            </VerticalStackLayout>
+                        </Frame>
+
+                        <!-- Events Card -->
+                        <Frame Grid.Column="1"
+                               BackgroundColor="White"
+                               Padding="15"
+                               CornerRadius="12"
+                               HasShadow="False">
+                            <VerticalStackLayout Spacing="5">
+                                <Label Text="📅" FontSize="24" />
+                                <Label Text="{Binding UpcomingEvents.Count}" 
+                                       FontSize="24"
+                                       FontAttributes="Bold"
+                                       TextColor="#EC4899" />
+                                <Label Text="Events" 
+                                       FontSize="12"
+                                       TextColor="#64748B" />
+                            </VerticalStackLayout>
+                        </Frame>
+                    </Grid>
+                </Grid>
+
+                <!-- Main Content -->
+                <VerticalStackLayout Spacing="20" Padding="20" BackgroundColor="#F8FAFC">
+
+                    <!-- Quick Actions -->
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="Quick Actions" 
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#1E293B" />
+
+                        <Grid ColumnDefinitions="*,*" 
+                              RowDefinitions="Auto,Auto,Auto" 
+                              ColumnSpacing="12" 
+                              RowSpacing="12">
+
+                            <!-- Search Books -->
+                            <Border Grid.Row="0" Grid.Column="0"
+                                    StrokeThickness="0"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.1" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <VerticalStackLayout Spacing="8" Padding="20">
+                                    <Label Text="📚" FontSize="32" HorizontalOptions="Center" />
+                                    <Label Text="Search" 
+                                           FontSize="14" 
+                                           FontAttributes="Bold" 
+                                           HorizontalOptions="Center"
+                                           TextColor="#1E293B" />
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SearchBooksCommand}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+
+                            <!-- Branches -->
+                            <Border Grid.Row="0" Grid.Column="1"
+                                    StrokeThickness="0"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.1" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <VerticalStackLayout Spacing="8" Padding="20">
+                                    <Label Text="🏛️" FontSize="32" HorizontalOptions="Center" />
+                                    <Label Text="Branches" 
+                                           FontSize="14" 
+                                           FontAttributes="Bold" 
+                                           HorizontalOptions="Center"
+                                           TextColor="#1E293B" />
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewBranchesCommand}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+
+                            <!-- Events -->
+                            <Border Grid.Row="1" Grid.Column="0"
+                                    StrokeThickness="0"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.1" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <VerticalStackLayout Spacing="8" Padding="20">
+                                    <Label Text="📅" FontSize="32" HorizontalOptions="Center" />
+                                    <Label Text="Events" 
+                                           FontSize="14" 
+                                           FontAttributes="Bold" 
+                                           HorizontalOptions="Center"
+                                           TextColor="#1E293B" />
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewEventsCommand}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+
+                            <!-- Refresh -->
+                            <Border Grid.Row="1" Grid.Column="1"
+                                    StrokeThickness="0"
+                                    BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.1" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <VerticalStackLayout Spacing="8" Padding="20">
+                                    <Label Text="🔄" FontSize="32" HorizontalOptions="Center" />
+                                    <Label Text="Refresh" 
+                                           FontSize="14" 
+                                           FontAttributes="Bold" 
+                                           HorizontalOptions="Center"
+                                           TextColor="#1E293B" />
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding LoadDataCommand}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+
+                            <Border Grid.Row="2" Grid.Column="0"
+          StrokeThickness="0"
+          BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.1" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <VerticalStackLayout Spacing="8" Padding="20">
+                                    <Label Text="📚" FontSize="32" HorizontalOptions="Center" />
+                                    <Label Text="ViewAppSetting" 
+                 FontSize="14" 
+                 FontAttributes="Bold" 
+                 HorizontalOptions="Center"
+                 TextColor="#1E293B" />
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ViewAppSettingCommand}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+                            <Border Grid.Row="2" Grid.Column="1"
+StrokeThickness="0"
+BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.Shadow>
+                                    <Shadow Brush="Black" Opacity="0.1" Radius="10" Offset="0,2" />
+                                </Border.Shadow>
+                                <VerticalStackLayout Spacing="8" Padding="20">
+                                    <Label Text="📚" FontSize="32" HorizontalOptions="Center" />
+                                    <Label Text="LoanHistory" 
+       FontSize="14" 
+       FontAttributes="Bold" 
+       HorizontalOptions="Center"
+       TextColor="#1E293B" />
+                                </VerticalStackLayout>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{}" />
+                                </Border.GestureRecognizers>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+              
+                
+
+
+
+                <!-- Current Loans -->
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="Your Books" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#1E293B"
+                                   VerticalOptions="Center" />
+                            <Border BackgroundColor="#6366F1"
+                                    Padding="6,2"
+                                    StrokeThickness="0">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <Label Text="{Binding CurrentLoans.Count}" 
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                            </Border>
+                        </HorizontalStackLayout>
+
+                        <!-- Loans List -->
+                        <CollectionView ItemsSource="{Binding CurrentLoans}"
+                                      SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeThickness="0"
+                                            BackgroundColor="White"
+                                            Margin="0,0,0,12">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="Black" Opacity="0.08" Radius="8" Offset="0,2" />
+                                        </Border.Shadow>
+                                        <Grid Padding="16" 
+                                              ColumnDefinitions="*,Auto"
+                                              RowDefinitions="Auto,Auto,Auto"
+                                              ColumnSpacing="12"
+                                              RowSpacing="6">
+
+                                            <!-- Book Icon -->
+                                            <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="3"
+                                                    WidthRequest="50"
+                                                    HeightRequest="50"
+                                                    BackgroundColor="#EEF2FF"
+                                                    HorizontalOptions="Start"
+                                                    VerticalOptions="Start"
+                                                    StrokeThickness="0">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Label Text="📖" 
+                                                       FontSize="24"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center" />
+                                            </Border>
+
+                                            <!-- Book Details -->
+                                            <VerticalStackLayout Grid.Row="0" Grid.Column="0" 
+                                                               Margin="60,0,0,0"
+                                                               Spacing="4">
+                                                <Label Text="{Binding BookTitle}" 
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#1E293B"
+                                                       LineBreakMode="TailTruncation" />
+
+                                                <Label Text="{Binding LoanDate, StringFormat='Borrowed: {0:MMM dd, yyyy}'}" 
+                                                       FontSize="12"
+                                                       TextColor="#64748B" />
+
+                                                <HorizontalStackLayout Spacing="5">
+                                                    <Label Text="📍" FontSize="10" />
+                                                    <Label Text="{Binding DueDate, StringFormat='Due: {0:MMM dd, yyyy}'}" 
+                                                           FontSize="12"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#DC2626" />
+                                                </HorizontalStackLayout>
+                                            </VerticalStackLayout>
+
+                                            <!-- Return Button -->
+                                            <Border Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+                                                    BackgroundColor="#6366F1"
+                                                    Padding="16,8"
+                                                    StrokeThickness="0"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Label Text="Return"
+                                                       FontSize="13"
+                                                       FontAttributes="Bold"
+                                                       TextColor="White" />
+                                                <Border.GestureRecognizers>
+                                                    <TapGestureRecognizer 
+                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ReturnBookCommand}"
+                                                        CommandParameter="{Binding .}" />
+                                                </Border.GestureRecognizers>
+                                            </Border>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <Border StrokeThickness="1"
+                                        Stroke="#E2E8F0"
+                                        BackgroundColor="White"
+                                        Padding="40">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="12" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout Spacing="12">
+                                        <Label Text="📚" 
+                                               FontSize="48"
+                                               HorizontalOptions="Center"
+                                               Opacity="0.3" />
+                                        <Label Text="No books borrowed" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               TextColor="#64748B" />
+                                        <Label Text="Search our collection to find your next read" 
+                                               FontSize="13"
+                                               HorizontalOptions="Center"
+                                               TextColor="#94A3B8" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Upcoming Events -->
+                    <VerticalStackLayout Spacing="12">
+                        <HorizontalStackLayout Spacing="10">
+                            <Label Text="Upcoming Events" 
+                                   FontSize="18"
+                                   FontAttributes="Bold"
+                                   TextColor="#1E293B"
+                                   VerticalOptions="Center" />
+                            <Border BackgroundColor="#EC4899"
+                                    Padding="6,2"
+                                    StrokeThickness="0"
+                                    IsVisible="{Binding UpcomingEvents.Count, Converter={StaticResource IntToBoolConverter}}">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10" />
+                                </Border.StrokeShape>
+                                <Label Text="{Binding UpcomingEvents.Count}" 
+                                       FontSize="12"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+                            </Border>
+                        </HorizontalStackLayout>
+
+                        <!-- Events List -->
+                        <CollectionView ItemsSource="{Binding UpcomingEvents}"
+                                      SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border StrokeThickness="0"
+                                            BackgroundColor="White"
+                                            Margin="0,0,0,12">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Border.Shadow>
+                                            <Shadow Brush="Black" Opacity="0.08" Radius="8" Offset="0,2" />
+                                        </Border.Shadow>
+                                        <Grid Padding="16" 
+                                              ColumnDefinitions="Auto,*"
+                                              ColumnSpacing="16">
+
+                                            <!-- Date Badge -->
+                                            <Border Grid.Column="0"
+                                                    BackgroundColor="#FEF3C7"
+                                                    Padding="12"
+                                                    StrokeThickness="0"
+                                                    WidthRequest="60"
+                                                    HeightRequest="60">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10" />
+                                                </Border.StrokeShape>
+                                                <VerticalStackLayout Spacing="0" 
+                                                                   HorizontalOptions="Center"
+                                                                   VerticalOptions="Center">
+                                                    <Label Text="{Binding EventDate, StringFormat='{0:MMM}'}" 
+                                                           FontSize="10"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#B45309"
+                                                           HorizontalOptions="Center" />
+                                                    <Label Text="{Binding EventDate, StringFormat='{0:dd}'}" 
+                                                           FontSize="20"
+                                                           FontAttributes="Bold"
+                                                           TextColor="#B45309"
+                                                           HorizontalOptions="Center" />
+                                                </VerticalStackLayout>
+                                            </Border>
+
+                                            <!-- Event Details -->
+                                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                                <Label Text="{Binding EventName}" 
+                                                       FontSize="16"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#1E293B"
+                                                       LineBreakMode="WordWrap" />
+
+                                                <HorizontalStackLayout Spacing="5">
+                                                    <Label Text="🕒" FontSize="12" />
+                                                    <Label Text="{Binding EventDate, StringFormat='{0:h:mm tt}'}" 
+                                                           FontSize="12"
+                                                           TextColor="#64748B" />
+                                                </HorizontalStackLayout>
+
+                                                <HorizontalStackLayout Spacing="5">
+                                                    <Label Text="📍" FontSize="12" />
+                                                    <Label Text="{Binding Location}" 
+                                                           FontSize="12"
+                                                           TextColor="#64748B"
+                                                           LineBreakMode="TailTruncation" />
+                                                </HorizontalStackLayout>
+
+                                                <Label Text="{Binding Description}" 
+                                                       FontSize="12"
+                                                       TextColor="#94A3B8"
+                                                       LineBreakMode="WordWrap"
+                                                       MaxLines="2" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <Border StrokeThickness="1"
+                                        Stroke="#E2E8F0"
+                                        BackgroundColor="White"
+                                        Padding="40">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="12" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout Spacing="12">
+                                        <Label Text="📅" 
+                                               FontSize="48"
+                                               HorizontalOptions="Center"
+                                               Opacity="0.3" />
+                                        <Label Text="No upcoming events" 
+                                               FontSize="16"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="Center"
+                                               TextColor="#64748B" />
+                                        <Label Text="Check back later for new activities" 
+                                               FontSize="13"
+                                               HorizontalOptions="Center"
+                                               TextColor="#94A3B8" />
+                                    </VerticalStackLayout>
+                                </Border>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </VerticalStackLayout>
+
+                    <!-- Logout Button -->
+                    <Border BackgroundColor="#EF4444"
+                            StrokeThickness="0"
+                            Margin="0,10,0,30">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="12" />
+                        </Border.StrokeShape>
+                        <Border.Shadow>
+                            <Shadow Brush="Black" Opacity="0.1" Radius="8" Offset="0,2" />
+                        </Border.Shadow>
+                        <Label Text="Logout" 
+                               FontSize="16"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               Padding="16"
+                               HorizontalOptions="Center" />
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LogoutCommand}" />
+                        </Border.GestureRecognizers>
+                    </Border>
+
                 </VerticalStackLayout>
-            </Frame>
-
-            <!-- Quick Actions -->
-            <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" 
-                  ColumnSpacing="10" RowSpacing="10">
-
-                <!-- Row 1 -->
-                <Frame Grid.Row="0" Grid.Column="0" 
-                       BackgroundColor="#E8F5E9" Padding="15">
-                    <VerticalStackLayout>
-                        <Label Text="📚" FontSize="30" HorizontalOptions="Center" />
-                        <Label Text="Books" FontSize="16" FontAttributes="Bold" 
-                               HorizontalOptions="Center" />
-                        <Label Text="Manage library books" FontSize="12" 
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                    <Frame.GestureRecognizers>
-                        <TapGestureRecognizer 
-                            Command="{Binding NavigateToBooksCommand}" />
-                    </Frame.GestureRecognizers>
-                </Frame>
-
-                <Frame Grid.Row="0" Grid.Column="1" 
-                       BackgroundColor="#E3F2FD" Padding="15">
-                    <VerticalStackLayout>
-                        <Label Text="👥" FontSize="30" HorizontalOptions="Center" />
-                        <Label Text="Members" FontSize="16" FontAttributes="Bold" 
-                               HorizontalOptions="Center" />
-                        <Label Text="Manage library members" FontSize="12" 
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
-                <!-- Row 2 -->
-                <Frame Grid.Row="1" Grid.Column="0" 
-                       BackgroundColor="#FFF3E0" Padding="15">
-                    <VerticalStackLayout>
-                        <Label Text="📖" FontSize="30" HorizontalOptions="Center" />
-                        <Label Text="Issued Books" FontSize="16" FontAttributes="Bold" 
-                               HorizontalOptions="Center" />
-                        <Label Text="View issued books" FontSize="12" 
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-
-                <Frame Grid.Row="1" Grid.Column="1" 
-                       BackgroundColor="#FCE4EC" Padding="15">
-                    <VerticalStackLayout>
-                        <Label Text="⚙️" FontSize="30" HorizontalOptions="Center" />
-                        <Label Text="Settings" FontSize="16" FontAttributes="Bold" 
-                               HorizontalOptions="Center" />
-                        <Label Text="App settings" FontSize="12" 
-                               HorizontalOptions="Center" />
-                    </VerticalStackLayout>
-                </Frame>
-            </Grid>
-
-            <!-- Logout Button -->
-            <Button Text="Logout" 
-                    BackgroundColor="#FF6B6B"
-                    TextColor="White"
-                    Command="{Binding LogoutCommand}"
-                    Margin="0,30,0,0" />
-
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
 
 </ContentPage>

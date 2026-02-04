@@ -12,6 +12,9 @@ namespace Library.Services
         Task<bool> ReturnBookAsync(int loanId);
         Task<List<BranchEvent>> GetUpcomingEventsAsync(int branchId = 0);
         Task<bool> RegisterForEventAsync(int eventId, int memberId);
+
+
+        //Task<List<Setting>> GetSettingAsync(string searchTerm);
     }
 
     public class LibraryService : ILibraryService
