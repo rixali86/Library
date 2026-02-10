@@ -200,4 +200,52 @@ WHERE email = @email";
             return Convert.ToBase64String(hash);
         }
     }
+    public class UserSession
+    {
+        private static UserSession _instance;
+        public static UserSession Instance => _instance ??= new UserSession();
+
+        private UserSession() { }
+
+        public bool IsAuthenticated { get; private set; } = false;
+        public string? UserEmail { get; private set; }
+
+        // Start session in memory and optionally store persistently
+        public async Task StartSessionAsync(string email)
+        {
+            UserEmail = email;
+            IsAuthenticated = true;
+
+            await SecureStorage.SetAsync("is_authenticated", "true");
+            await SecureStorage.SetAsync("user_email", email);
+        }
+
+        // End session
+        public async Task EndSessionAsync()
+        {
+            UserEmail = null;
+            IsAuthenticated = false;
+
+            SecureStorage.Remove("is_authenticated");
+            SecureStorage.Remove("user_email");
+        }
+
+        // Load session from SecureStorage (on app start)
+        public async Task LoadSessionAsync()
+        {
+            var auth = await SecureStorage.GetAsync("is_authenticated");
+            var email = await SecureStorage.GetAsync("user_email");
+
+            if (!string.IsNullOrEmpty(auth) && auth == "true" && !string.IsNullOrEmpty(email))
+            {
+                IsAuthenticated = true;
+                UserEmail = email;
+            }
+            else
+            {
+                IsAuthenticated = false;
+                UserEmail = null;
+            }
+        }
+    }
 }

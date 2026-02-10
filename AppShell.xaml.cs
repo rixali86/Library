@@ -1,53 +1,120 @@
-﻿using Library.Services;
+﻿using Library;
+using Library.Services;
+using Library.Views;
+using System.Configuration;
+using Library.Models;
+using Microsoft.Maui.Controls;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Library;
 
 public partial class AppShell : Shell
 {
-    public AppShell()
+    private readonly IAuthService _authService;
+    private readonly IDatabaseService _databaseService;
+
+    // Bindable header properties (set once in constructor)
+    public string UserName { get; private set; } = "Guest";
+    public string UserEmail { get; private set; } = string.Empty;
+    public string UserInitials => BuildInitials(UserName);
+
+    public Command GoToSettingsCommand { get; }
+
+    // Updated to accept IDatabaseService so AppShell can load the logged-in member details.
+    public AppShell(IAuthService authService, IDatabaseService databaseService)
     {
         InitializeComponent();
+        _authService = authService;
+        _databaseService = databaseService;
 
-        // Add navigation guards
-        Navigating += OnShellNavigating;
+        // Use the shell instance as its own BindingContext so header bindings work.
+        BindingContext = this;
+
+        // Start loading member details asynchronously (fire-and-forget).
+        _ = LoadMemberAsync();
+
+        GoToSettingsCommand = new Command(async () => await Shell.Current.GoToAsync("//Setting"));
+
+        // Register routes for pages that may be navigated via GoToAsync with absolute routes
+        Routing.RegisterRoute("Login", typeof(LoginPage));
+        Routing.RegisterRoute("Profile", typeof(MemberProfilePage));
+        Routing.RegisterRoute("Branches", typeof(BranchDetailsPage)); 
+
     }
 
-    private async void OnShellNavigating(object sender, ShellNavigatingEventArgs e)
+    // Load member details from DB using the logged-in email and update the flyout header.
+    private async Task LoadMemberAsync()
     {
-        var current = e.Current?.Location?.OriginalString;
-        var target = e.Target?.Location?.OriginalString;
-
-        Console.WriteLine($"From: {current} → To: {target}");
-
-        // List of protected routes
-        var protectedRoutes = new[]
+        try
         {
-            "Dashboard",
-            "SearchBook",
-            "SearchMember"
-        };
+            var email = _authService.CurrentUserEmail;
+            if (string.IsNullOrWhiteSpace(email))
+                return;
 
-        // Check if navigating TO a protected route
-        foreach (var route in protectedRoutes)
-        {
-            if (target?.Contains(route) == true)
+            var sql = @"
+SELECT member_id AS MemberId,
+       first_name AS FirstName,
+       last_name AS LastName,
+       email AS Email
+
+FROM members
+WHERE email = @email
+LIMIT 1;";
+
+            var parameters = new Dictionary<string, object> { { "@email", email } };
+
+            var member = await _databaseService.QuerySingleAsync<Member>(sql, parameters);
+
+            if (member != null)
             {
-                // Check if user is authenticated
-                var authService = Handler?.MauiContext?.Services?.GetService<IAuthService>();
+                // Prefer real name when available; fall back to email local-part.
+                var displayName = (string.IsNullOrWhiteSpace(member.FirstName) && string.IsNullOrWhiteSpace(member.LastName))
+                    ? (member.Email?.Split('@')[0] ?? "Guest")
+                    : $"{member.FirstName} {member.LastName}".Trim();
 
-                if (authService == null || !authService.IsAuthenticated)
-                {
-                    // CANCEL navigation
-                    e.Cancel();
+                UserName = displayName;
+                UserEmail = member.Email ?? string.Empty;
 
-                    // Redirect to login
-                    await DisplayAlert("Access Denied", "Please login first", "OK");
-                    await GoToAsync("//Login");
-
-                    return;
-                }
+                // Notify bindings that properties changed (Shell inherits BindableObject).
+                OnPropertyChanged(nameof(UserName));
+                OnPropertyChanged(nameof(UserEmail));
+                OnPropertyChanged(nameof(UserInitials));
             }
         }
+        catch
+        {
+            // Silent fail - keep Guest display if anything goes wrong.
+        }
+    }
 
+    private static string BuildInitials(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name))
+            return "?";
+
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+        if (parts.Length == 1)
+            return parts[0].Length >= 1 ? parts[0][0].ToString().ToUpper() : "?";
+
+        return (parts[0][0].ToString() + parts[^1][0].ToString()).ToUpper();
+    }
+
+    private async void OnLogoutClicked(object sender, EventArgs e)
+    {
+        bool confirm = await DisplayAlert(
+            "Logout",
+            "Are you sure you want to logout?",
+            "Yes",
+            "No");
+
+        if (confirm)
+        {
+            await _authService.LogoutAsync();
+            await UserSession.Instance.EndSessionAsync();
+
+            // Switch back to AuthShell
+            Application.Current.MainPage = new AuthShell();
+        }
     }
 }

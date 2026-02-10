@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:Library.Views"
+       x:Class="Library.AuthShell"
+       Title="Library - Authentication"
+       FlyoutBehavior="Disabled">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Colors -->
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Secondary">#FF9800</Color>
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Login Page -->
+    <ShellContent Route="Login"
+                  ContentTemplate="{DataTemplate views:LoginPage}"
+                  Title="Login" />
+
+    <!-- Register Page -->
+    <ShellContent Route="Register"
+                  ContentTemplate="{DataTemplate views:RegisterPage}"
+                  Title="Register" />
+
+</Shell>

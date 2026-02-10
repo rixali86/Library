@@ -7,8 +7,10 @@
         public string? Isbn { get; set; }
         public int? PublicationYear { get; set; }
         public string? Publisher { get; set; }
-    }
 
+
+        public string Author { get; set; } = string.Empty; // <-- added
+    }
     public class Author
     {
         public int AuthorId { get; set; }
@@ -26,9 +28,8 @@
         public Branch? Branch { get; set; }
     }
 
-    public class TitleAuthor
-    {
-        public int TitleId { get; set; }
-        public int AuthorId { get; set; }
-    }
+
 }
+
+
+

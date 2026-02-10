@@ -4,7 +4,7 @@
        xmlns:views="clr-namespace:Library.Views"
        xmlns:helpers="clr-namespace:Library.Helpers"
        x:Class="Library.AppShell"
-       Title="Library">
+       Title="Library Management System">
 
     <Shell.Resources>
         <ResourceDictionary>
@@ -16,27 +16,85 @@
             <helpers:NotEmptyConverter x:Key="NotEmptyConverter" />
             <helpers:InverseBoolConverter x:Key="InverseBoolConverter" />
             <helpers:DueDateColorConverter x:Key="DueDateColorConverter" />
+            <helpers:IntToBoolConverter x:Key="IntToBoolConverter" />
         </ResourceDictionary>
     </Shell.Resources>
 
-    
-    
-    
-    <ShellContent Route="Login" 
-                  ContentTemplate="{DataTemplate views:LoginPage}" 
-                  Title="Login" />
+    <!-- Flyout Header: show current user -->
+    <Shell.FlyoutHeader>
+        <Grid Padding="12" BackgroundColor="{StaticResource Primary}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="64" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- simple avatar circle with initials -->
+            <Frame WidthRequest="56" HeightRequest="56"
+                   CornerRadius="28"
+                   BackgroundColor="White"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Padding="0">
+                <Label Text="{Binding UserInitials}"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Primary}" />
+            </Frame>
+
+            <StackLayout Grid.Column="1" Padding="8,0" VerticalOptions="Center">
+                <Label Text="{Binding UserName}" FontAttributes="Bold" TextColor="White" />
+                <Label Text="{Binding UserEmail}" FontSize="Micro" TextColor="White" Opacity="0.9" />
+            </StackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- Flyout content -->
+    <FlyoutItem Title="Home" Icon="home.png">
+        <ShellContent Route="Dashboard"
+                      ContentTemplate="{DataTemplate views:DashboardPage}"
+                      Title="Dashboard" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Search Books" Icon="book.png">
+        <ShellContent Route="Search"
+                      ContentTemplate="{DataTemplate views:SearchBookPage}"
+                      Title="Search Books" />
+    </FlyoutItem>
 
   
 
-    <ShellContent Route="Register" 
-                  ContentTemplate="{DataTemplate views:RegisterPage}" 
-                  Title="Register" />
+    <FlyoutItem Title="Branches" Icon="branches.png">
+        <ShellContent Route="Branches"
+                      ContentTemplate="{DataTemplate views:BranchesPage}"
+                      Title="Branches" />
+    </FlyoutItem>
 
-    <ShellContent Route="Dashboard" 
-                  ContentTemplate="{DataTemplate views:DashboardPage}" 
-                  Title="Dashboard" />
+    <FlyoutItem Title="Events" Icon="events.png">
+        <ShellContent Route="Events"
+                      ContentTemplate="{DataTemplate views:EventsAttendedPage}"
+                      Title="Events" />
+    </FlyoutItem>
 
-  
+    <FlyoutItem Title="Account" Icon="profile.png">
+        <ShellContent Route="Profile"
+                      ContentTemplate="{DataTemplate views:MemberProfilePage}"
+                      Title="My Profile" />
+        <ShellContent Route="Setting"
+                      ContentTemplate="{DataTemplate views:SettingsPage}"
+                      Title="Settings" />
+    </FlyoutItem>
 
+    <!-- Footer with buttons (MenuItem cannot be placed inside a View collection) -->
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="12" Spacing="8">
+            <Button Text="Settings"
+                    ImageSource="settings.png"
+                    Command="{Binding GoToSettingsCommand}" />
+            <Button Text="Logout"
+                    ImageSource="logout.png"
+                    Clicked="OnLogoutClicked" />
+        </StackLayout>
+    </Shell.FlyoutFooter>
 
 </Shell>

@@ -1,99 +1,96 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Library.Services;
-using Library.Views;
-using System.Windows.Input;
+using System.Threading.Tasks;
 
-namespace Library.ViewModels
+namespace Library.ViewModels;
+
+public partial class LoginViewModel : ObservableObject
 {
-    public partial class LoginViewModel : ObservableObject
+    private readonly IAuthService _authService;
+
+    [ObservableProperty]
+    private string email = string.Empty;
+
+    [ObservableProperty]
+    private string password = string.Empty;
+
+    [ObservableProperty]
+    private bool isLoading = false;
+
+    [ObservableProperty]
+    private string errorMessage = string.Empty;
+
+    [ObservableProperty]
+    private bool isPasswordHidden = true;
+
+    public string EyeIcon => IsPasswordHidden ? "eye_closed.png" : "eye_open.png";
+
+    [RelayCommand]
+    private void TogglePassword()
     {
-        private readonly IAuthService _authService;
+        IsPasswordHidden = !IsPasswordHidden;
+        OnPropertyChanged(nameof(EyeIcon));
+    }
 
-        [ObservableProperty]
-        private string email = string.Empty;
+    public LoginViewModel(IAuthService authService)
+    {
+        _authService = authService;
+    }
 
-        [ObservableProperty]
-        private string password = string.Empty;
-
-   
-
-        [ObservableProperty]
-        private bool isLoading = false;
-
-        [ObservableProperty]
-        private string errorMessage = string.Empty;
-
-        [ObservableProperty]
-        private bool isPasswordHidden = true;
-
-        public string EyeIcon => IsPasswordHidden ? "eye_closed.png" : "eye_open.png";
-
-        [RelayCommand]
-        private void TogglePassword()
+    [RelayCommand]
+    private async Task LoginAsync()
+    {
+        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
         {
-            IsPasswordHidden = !IsPasswordHidden;
-            OnPropertyChanged(nameof(EyeIcon));
+            ErrorMessage = "Please enter both email and password";
+            return;
         }
 
+        IsLoading = true;
+        ErrorMessage = string.Empty;
 
-        public LoginViewModel(IAuthService authService)
+        try
         {
-            _authService = authService;
-        }
+            var success = await _authService.LoginAsync(Email, Password);
 
-        [RelayCommand]
-      
-
-        private async Task LoginAsync()
-        {
-            if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+            if (success)
             {
-                ErrorMessage = "Please enter both email and password";
-                return;
+                // Start user session
+                await UserSession.Instance.StartSessionAsync(Email);
+
+                // Switch to MainShell
+                var mainShell = Application.Current.Handler.MauiContext.Services.GetService<AppShell>();
+                Application.Current.MainPage = mainShell;
             }
-
-            IsLoading = true;
-            ErrorMessage = string.Empty;
-
-            try
+            else
             {
-                var success = await _authService.LoginAsync(Email, Password);
-
-                if (success)
-                {
-                    // Navigate to dashboard
-                    await Shell.Current.GoToAsync("//Dashboard");
-                }
-                else
-                {
-                    ErrorMessage = "Invalid email or password";
-                }
-            }
-            catch (Exception ex)
-            {
-                ErrorMessage = $"Login failed: {ex.Message}";
-            }
-            finally
-            {
-                IsLoading = false;
+                ErrorMessage = "Invalid email or password";
             }
         }
-
-        [RelayCommand]
-        private async Task GoToRegisterAsync()
+        catch (Exception ex)
         {
-            await Shell.Current.GoToAsync("//Register");
+            ErrorMessage = $"Login failed: {ex.Message}";
         }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
 
-        
-        
+    [RelayCommand]
+    private async Task GoToRegisterAsync()
+    {
+        await Shell.Current.GoToAsync("//Register");
+    }
 
-
-
-
-     
-
+    // Added: clear credentials and UI state (called when login page appears or on logout)
+    public void ClearCredentials()
+    {
+        Email = string.Empty;
+        Password = string.Empty;
+        ErrorMessage = string.Empty;
+        IsPasswordHidden = true;
+        OnPropertyChanged(nameof(EyeIcon));
     }
 }
-

@@ -1,5 +1,11 @@
 ﻿using Library.Models;
 using Library.Services;
+using MySql.Data.MySqlClient;
+using System.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Library.Services
 {
@@ -12,9 +18,6 @@ namespace Library.Services
         Task<bool> ReturnBookAsync(int loanId);
         Task<List<BranchEvent>> GetUpcomingEventsAsync(int branchId = 0);
         Task<bool> RegisterForEventAsync(int eventId, int memberId);
-
-
-        //Task<List<Setting>> GetSettingAsync(string searchTerm);
     }
 
     public class LibraryService : ILibraryService
@@ -29,7 +32,41 @@ namespace Library.Services
         public async Task<List<Branch>> GetBranchesAsync()
         {
             var query = "SELECT * FROM branches ORDER BY branch_name";
-            return await _databaseService.QueryAsync<Branch>(query);
+            var branches = await _databaseService.QueryAsync<Branch>(query);
+
+            if (branches == null || branches.Count == 0)
+                return branches;
+
+            // Build parameters for IN() safely (param per id)
+            var parameters = new Dictionary<string, object>();
+            var paramNames = new List<string>();
+            for (int i = 0; i < branches.Count; i++)
+            {
+                var name = $"@id{i}";
+                parameters[name] = branches[i].BranchId;
+                paramNames.Add(name);
+            }
+
+            var inClause = string.Join(",", paramNames);
+
+            // Load hours and contacts in two queries and attach to each branch.
+            var hoursQuery = $"SELECT * FROM branch_hours WHERE branch_id IN ({inClause}) ORDER BY branch_id, hour_id";
+            var contactsQuery = $"SELECT * FROM branch_contacts WHERE branch_id IN ({inClause}) ORDER BY branch_id, contact_id";
+
+            var hours = await _databaseService.QueryAsync<BranchHours>(hoursQuery, parameters);
+            var contacts = await _databaseService.QueryAsync<BranchContact>(contactsQuery, parameters);
+
+            var hoursLookup = hours?.GroupBy(h => h.BranchId).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<int, List<BranchHours>>();
+            var contactsLookup = contacts?.GroupBy(c => c.BranchId).ToDictionary(g => g.Key, g => g.ToList()) ?? new Dictionary<int, List<BranchContact>>();
+
+            foreach (var b in branches)
+            {
+                if (hoursLookup.TryGetValue(b.BranchId, out var hlist))
+                    b.Hours = hlist;
+               
+            }
+
+            return branches;
         }
 
         public async Task<List<BookCopy>> SearchBooksAsync(string searchTerm)
@@ -74,7 +111,6 @@ namespace Library.Services
         {
             try
             {
-                // Check if copy is available
                 var checkQuery = @"
                     SELECT COUNT(*) FROM book_copies bc
                     LEFT JOIN loans l ON bc.copy_id = l.copy_id AND l.status = 'Checked Out'
@@ -86,7 +122,6 @@ namespace Library.Services
                 if (!available)
                     return false;
 
-                // Create loan
                 var loanQuery = @"
                     INSERT INTO loans (copy_id, member_id, checkout_datetime, due_datetime, status)
                     VALUES (@copyId, @memberId, @checkoutDate, @dueDate, 'Checked Out')";
@@ -162,7 +197,6 @@ namespace Library.Services
         {
             try
             {
-                // Check if already registered
                 var checkQuery = "SELECT COUNT(*) FROM event_registrations WHERE event_id = @eventId AND member_id = @memberId";
                 var checkParams = new Dictionary<string, object>
                 {
@@ -175,7 +209,6 @@ namespace Library.Services
                 if (alreadyRegistered)
                     return false;
 
-                // Register
                 var registerQuery = @"
                     INSERT INTO event_registrations (event_id, member_id, registration_datetime, attendance_status)
                     VALUES (@eventId, @memberId, @regDate, 'Registered')";
@@ -197,4 +230,4 @@ namespace Library.Services
             }
         }
     }
-}   
+}

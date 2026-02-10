@@ -12,6 +12,8 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Library.ViewModels.DashboardViewModel.CurrentLoans">
             <inheritdoc cref="F:Library.ViewModels.DashboardViewModel.currentLoans"/>
@@ -49,6 +51,18 @@
         <member name="P:Library.ViewModels.DashboardViewModel.ViewEventsCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.ViewEventsAsync"/>.</summary>
         </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.viewAppSettingCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.ViewAppSettingCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.ViewAppSettingCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.ViewAppSettingAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.DashboardViewModel.viewMemberLoansCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.ViewMemberLoansCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.DashboardViewModel.ViewMemberLoansCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.DashboardViewModel.ViewMemberLoansAsync"/>.</summary>
+        </member>
         <member name="F:Library.ViewModels.DashboardViewModel.logoutCommand">
             <summary>The backing field for <see cref="P:Library.ViewModels.DashboardViewModel.LogoutCommand"/>.</summary>
         </member>
@@ -65,6 +79,7 @@
             <inheritdoc/>
             <inheritdoc/>
             <inheritdoc/>
+            <inheritdoc/>
         </member>
         <member name="P:Library.ViewModels.LoginViewModel.Email">
             <inheritdoc cref="F:Library.ViewModels.LoginViewModel.email"/>
@@ -78,6 +93,15 @@
         <member name="P:Library.ViewModels.LoginViewModel.ErrorMessage">
             <inheritdoc cref="F:Library.ViewModels.LoginViewModel.errorMessage"/>
         </member>
+        <member name="P:Library.ViewModels.LoginViewModel.IsPasswordHidden">
+            <inheritdoc cref="F:Library.ViewModels.LoginViewModel.isPasswordHidden"/>
+        </member>
+        <member name="F:Library.ViewModels.LoginViewModel.togglePasswordCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.LoginViewModel.TogglePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.LoginViewModel.TogglePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.LoginViewModel.TogglePassword"/>.</summary>
+        </member>
         <member name="F:Library.ViewModels.LoginViewModel.loginCommand">
             <summary>The backing field for <see cref="P:Library.ViewModels.LoginViewModel.LoginCommand"/>.</summary>
         </member>
@@ -89,6 +113,59 @@
         </member>
         <member name="P:Library.ViewModels.LoginViewModel.GoToRegisterCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.LoginViewModel.GoToRegisterAsync"/>.</summary>
+        </member>
+        <member name="T:Library.ViewModels.MemberProfileViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.MemberId">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.memberId"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.FirstName">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.firstName"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.LastName">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.lastName"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.DateOfBirth">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.dateOfBirth"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.Email">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.email"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.Phone">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.phone"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.RegisteredDate">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.registeredDate"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.CreatedAt">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.createdAt"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.Password">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.password"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.ConfirmPassword">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.confirmPassword"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.IsLoading">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.isLoading"/>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.ErrorMessage">
+            <inheritdoc cref="F:Library.ViewModels.MemberProfileViewModel.errorMessage"/>
+        </member>
+        <member name="F:Library.ViewModels.MemberProfileViewModel.loadMemberCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.MemberProfileViewModel.LoadMemberCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.LoadMemberCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.MemberProfileViewModel.LoadMemberAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.MemberProfileViewModel.saveCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.MemberProfileViewModel.SaveCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.MemberProfileViewModel.SaveCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.MemberProfileViewModel.SaveAsync"/>.</summary>
         </member>
         <member name="T:Library.ViewModels.RegisterViewModel">
             <inheritdoc/>
@@ -123,6 +200,15 @@
         <member name="P:Library.ViewModels.RegisterViewModel.ErrorMessage">
             <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.errorMessage"/>
         </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.IsPasswordHidden">
+            <inheritdoc cref="F:Library.ViewModels.RegisterViewModel.isPasswordHidden"/>
+        </member>
+        <member name="F:Library.ViewModels.RegisterViewModel.togglePasswordCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.RegisterViewModel.TogglePasswordCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.RegisterViewModel.TogglePasswordCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.RegisterViewModel.TogglePassword"/>.</summary>
+        </member>
         <member name="F:Library.ViewModels.RegisterViewModel.registerCommand">
             <summary>The backing field for <see cref="P:Library.ViewModels.RegisterViewModel.RegisterCommand"/>.</summary>
         </member>
@@ -135,11 +221,103 @@
         <member name="P:Library.ViewModels.RegisterViewModel.GoToLoginCommand">
             <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.RegisterViewModel.GoToLogin"/>.</summary>
         </member>
-        <member name="F:Library.ViewModels.RegisterViewModel.clearFormCommand">
-            <summary>The backing field for <see cref="P:Library.ViewModels.RegisterViewModel.ClearFormCommand"/>.</summary>
+        <member name="T:Library.ViewModels.SearchBookViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
         </member>
-        <member name="P:Library.ViewModels.RegisterViewModel.ClearFormCommand">
-            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.RegisterViewModel.ClearForm"/>.</summary>
+        <member name="P:Library.ViewModels.SearchBookViewModel.SearchQuery">
+            <inheritdoc cref="F:Library.ViewModels.SearchBookViewModel.searchQuery"/>
+        </member>
+        <member name="P:Library.ViewModels.SearchBookViewModel.Titles">
+            <inheritdoc cref="F:Library.ViewModels.SearchBookViewModel.titles"/>
+        </member>
+        <member name="P:Library.ViewModels.SearchBookViewModel.IsLoading">
+            <inheritdoc cref="F:Library.ViewModels.SearchBookViewModel.isLoading"/>
+        </member>
+        <member name="F:Library.ViewModels.SearchBookViewModel.searchCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SearchBookViewModel.SearchCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SearchBookViewModel.SearchCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SearchBookViewModel.SearchAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.SearchBookViewModel.selectTitleCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SearchBookViewModel.SelectTitleCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SearchBookViewModel.SelectTitleCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand`1"/> instance wrapping <see cref="M:Library.ViewModels.SearchBookViewModel.SelectTitleAsync(Library.Models.Title)"/>.</summary>
+        </member>
+        <member name="T:Library.ViewModels.SettingsViewModel">
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+            <inheritdoc/>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.SelectedTheme">
+            <inheritdoc cref="F:Library.ViewModels.SettingsViewModel.selectedTheme"/>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.NotificationsEnabled">
+            <inheritdoc cref="F:Library.ViewModels.SettingsViewModel.notificationsEnabled"/>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.SelectedLanguage">
+            <inheritdoc cref="F:Library.ViewModels.SettingsViewModel.selectedLanguage"/>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.StatusMessage">
+            <inheritdoc cref="F:Library.ViewModels.SettingsViewModel.statusMessage"/>
+        </member>
+        <member name="M:Library.ViewModels.SettingsViewModel.OnSelectedThemeChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:Library.ViewModels.SettingsViewModel.SelectedTheme"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:Library.ViewModels.SettingsViewModel.SelectedTheme"/> is changed.</remarks>
+        </member>
+        <member name="M:Library.ViewModels.SettingsViewModel.OnNotificationsEnabledChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:Library.ViewModels.SettingsViewModel.NotificationsEnabled"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:Library.ViewModels.SettingsViewModel.NotificationsEnabled"/> is changed.</remarks>
+        </member>
+        <member name="M:Library.ViewModels.SettingsViewModel.OnSelectedLanguageChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:Library.ViewModels.SettingsViewModel.SelectedLanguage"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:Library.ViewModels.SettingsViewModel.SelectedLanguage"/> is changed.</remarks>
+        </member>
+        <member name="F:Library.ViewModels.SettingsViewModel.reportProblemCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SettingsViewModel.ReportProblemCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.ReportProblemCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SettingsViewModel.ReportProblemAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.SettingsViewModel.openTermsCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SettingsViewModel.OpenTermsCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.OpenTermsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SettingsViewModel.OpenTermsAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.SettingsViewModel.partnerWithUsCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SettingsViewModel.PartnerWithUsCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.PartnerWithUsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SettingsViewModel.PartnerWithUsAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.SettingsViewModel.checkForUpdatesCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SettingsViewModel.CheckForUpdatesCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.CheckForUpdatesCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SettingsViewModel.CheckForUpdatesAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.SettingsViewModel.connectWithUsCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SettingsViewModel.ConnectWithUsCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.ConnectWithUsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SettingsViewModel.ConnectWithUsAsync"/>.</summary>
+        </member>
+        <member name="F:Library.ViewModels.SettingsViewModel.inviteFriendsCommand">
+            <summary>The backing field for <see cref="P:Library.ViewModels.SettingsViewModel.InviteFriendsCommand"/>.</summary>
+        </member>
+        <member name="P:Library.ViewModels.SettingsViewModel.InviteFriendsCommand">
+            <summary>Gets an <see cref="T:CommunityToolkit.Mvvm.Input.IAsyncRelayCommand"/> instance wrapping <see cref="M:Library.ViewModels.SettingsViewModel.InviteFriendsAsync"/>.</summary>
         </member>
         <member name="T:Library.Resource">
             <summary>
@@ -174,20 +352,50 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrorMessage">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPasswordHidden">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPasswordHidden" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.MemberId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "MemberId" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FirstName">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FirstName" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LastName">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LastName" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Phone">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Phone" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.DateOfBirth">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "DateOfBirth" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Phone">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Phone" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.RegisteredDate">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "RegisteredDate" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CreatedAt">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CreatedAt" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ConfirmPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SearchQuery">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SearchQuery" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Titles">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Titles" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedTheme">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedTheme" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.NotificationsEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "NotificationsEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedLanguage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedLanguage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
         </member>
         <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
             <summary>
@@ -216,20 +424,50 @@
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrorMessage">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrorMessage" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPasswordHidden">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPasswordHidden" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.MemberId">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "MemberId" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FirstName">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FirstName" generated properties.</summary>
         </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LastName">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LastName" generated properties.</summary>
         </member>
-        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Phone">
-            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Phone" generated properties.</summary>
-        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.DateOfBirth">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "DateOfBirth" generated properties.</summary>
         </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Phone">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Phone" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.RegisteredDate">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "RegisteredDate" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CreatedAt">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CreatedAt" generated properties.</summary>
+        </member>
         <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ConfirmPassword">
             <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ConfirmPassword" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SearchQuery">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SearchQuery" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Titles">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Titles" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedTheme">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedTheme" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.NotificationsEnabled">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "NotificationsEnabled" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedLanguage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedLanguage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
         </member>
     </members>
 </doc>

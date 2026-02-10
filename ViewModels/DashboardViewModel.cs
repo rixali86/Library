@@ -82,20 +82,27 @@ namespace Library.ViewModels
             await Shell.Current.GoToAsync("//Events");
         }
         [RelayCommand]
-        private async Task ViewAppSetting()
+        private async Task ViewAppSettingAsync()
         {
             await Shell.Current.GoToAsync("//Setting");
         }
-       
-        
-      
+
+        [RelayCommand]
+        private async Task ViewMemberLoansAsync()
+        {
+            await Shell.Current.GoToAsync("//Loan");
+        }
 
 
         [RelayCommand]
         private async Task LogoutAsync()
         {
             await _authService.LogoutAsync();
-            await Shell.Current.GoToAsync("//Login");
+
+            // Switch application to the authentication shell (AuthShell),
+            // because the Login route is registered in AuthShell.
+            // This avoids attempting to navigate to a route that AppShell doesn't know about.
+            ((App)Application.Current).SwitchToAuthShell();
         }
 
         [RelayCommand]

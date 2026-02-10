@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Library.Views.BranchesPage"
+             Title="Branches"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+	<Grid Padding="12" RowDefinitions="Auto,Auto,*">
+
+		<!-- Header -->
+		<Label Text="Library Branches"
+               FontAttributes="Bold"
+               FontSize="22" />
+
+		<!-- 🔍 Search Bar -->
+		<SearchBar x:Name="BranchSearchBar"
+                   Grid.Row="1"
+                   Placeholder="Search by branch name or city"
+                   TextChanged="BranchSearchBar_TextChanged"
+                   Margin="0,8,0,4" />
+
+		<!-- Scrollable list -->
+		<CollectionView x:Name="BranchesCollection"
+                        Grid.Row="2"
+                        SelectionMode="Single"
+                        SelectionChanged="BranchesCollection_SelectionChanged">
+
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Frame Padding="12"
+                           Margin="0,6"
+                           CornerRadius="8"
+                           BorderColor="#DDD">
+						<VerticalStackLayout>
+							<Label Text="{Binding BranchName}"
+                                   FontAttributes="Bold" />
+
+							<Label Text="{Binding FullAddress}"
+                                   FontSize="12"
+                                   LineBreakMode="TailTruncation" />
+						</VerticalStackLayout>
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<ActivityIndicator x:Name="LoadingIndicator"
+                           Grid.Row="2"
+                           IsRunning="False"
+                           IsVisible="False"
+                           VerticalOptions="Center" />
+
+	</Grid>
+</ContentPage>

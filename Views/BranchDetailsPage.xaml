@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Library.Views.BranchDetailsPage"
+             Title="Branch Details"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="12">
+            <Label Text="{Binding Branch.BranchName}" FontAttributes="Bold" FontSize="24" />
+            <Label Text="{Binding Branch.BranchType}" FontAttributes="Italic" FontSize="14" TextColor="Gray" />
+
+            <Label Text="Address" FontAttributes="Bold" />
+            <Label Text="{Binding Branch.FullAddress}" LineBreakMode="WordWrap" />
+
+            <HorizontalStackLayout Spacing="10">
+                <Button Text="Open in Maps" Command="{Binding OpenMapCommand}" />
+                <Button Text="Call" Command="{Binding CallCommand}" />
+                <Button Text="Email" Command="{Binding EmailCommand}" />
+            </HorizontalStackLayout>
+
+            <Label Text="Contacts" FontAttributes="Bold" />
+
+            <Label Text="{Binding Branch.Phone}" FontAttributes="Bold"  FontSize="15"/>
+            <Label Text="Email" FontAttributes="Bold" />
+            <Label Text="{Binding Branch.Email}" FontAttributes="Bold"  FontSize="15"/>
+
+
+         
+            <!--<CollectionView ItemsSource="{Binding Branch.Contacts}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Padding="8" Margin="0,4" BorderColor="#DDD" CornerRadius="6">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" FontAttributes="Bold" />
+                                <Label Text="{Binding Role}" FontSize="12" TextColor="Gray" />
+                                <HorizontalStackLayout Spacing="8">
+                                    <Label Text="{Binding Phone}" />
+                                    <Label Text="�" />
+                                    <Label Text="{Binding Email}" />
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView> -->
+
+            <Label Text="Hours" FontAttributes="Bold" />
+            <CollectionView ItemsSource="{Binding Branch.Hours}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Label Text="{Binding Display}" />
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

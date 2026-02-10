@@ -88,7 +88,7 @@
             <ActivityIndicator IsRunning="{Binding IsLoading}" 
                                IsVisible="{Binding IsLoading}" 
                                HorizontalOptions="Center" />
-
+    
             <!-- Register Link -->
             <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
                 <Label Text="Don't have an account?" />
