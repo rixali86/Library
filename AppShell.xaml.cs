@@ -39,7 +39,8 @@ public partial class AppShell : Shell
         // Register routes for pages that may be navigated via GoToAsync with absolute routes
         Routing.RegisterRoute("Login", typeof(LoginPage));
         Routing.RegisterRoute("Profile", typeof(MemberProfilePage));
-        Routing.RegisterRoute("Branches", typeof(BranchDetailsPage)); 
+        Routing.RegisterRoute("EventDetails", typeof(EventsAttendedPage));
+        Routing.RegisterRoute("BranchDetails", typeof(BranchDetailsPage));
 
     }
 

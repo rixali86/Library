@@ -1,15 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Library.Models;
-using Library.Services; 
+using Library.Services;
 using Microsoft.Maui.Controls;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Library.ViewModels
 {
-    public class EventsAttendedViewModel : ObservableObject
+    public partial class EventsAttendedViewModel : ObservableObject
     {
         private readonly IAuthService _authService;
         private readonly ILibraryService _libraryService;
@@ -24,6 +25,7 @@ namespace Library.ViewModels
             LoadDataCommand = new AsyncRelayCommand(LoadDataAsync);
             ViewEventDetailsCommand = new AsyncRelayCommand<AttendedEventItem>(ViewEventDetailsAsync);
             ViewBranchCommand = new AsyncRelayCommand<AttendedEventItem>(ViewBranchAsync);
+            SearchCommand = new RelayCommand(PerformSearch);
 
             // Start loading immediately
             LoadDataCommand.Execute(null);
@@ -32,6 +34,7 @@ namespace Library.ViewModels
         public IAsyncRelayCommand LoadDataCommand { get; }
         public IAsyncRelayCommand<AttendedEventItem> ViewEventDetailsCommand { get; }
         public IAsyncRelayCommand<AttendedEventItem> ViewBranchCommand { get; }
+        public IRelayCommand SearchCommand { get; }
 
         private bool isLoading;
         public bool IsLoading
@@ -40,11 +43,60 @@ namespace Library.ViewModels
             set => SetProperty(ref isLoading, value);
         }
 
+        // ✅ Original list (database se aaye hue sab events)
         private List<AttendedEventItem> attendedEvents = new();
         public List<AttendedEventItem> AttendedEvents
         {
             get => attendedEvents;
-            set => SetProperty(ref attendedEvents, value);
+            set
+            {
+                SetProperty(ref attendedEvents, value);
+                PerformSearch(); // Jab bhi data load ho, filter apply karo
+            }
+        }
+
+        // ✅ Filtered list (jo UI mein dikhega)
+        private List<AttendedEventItem> filteredEvents = new();
+        public List<AttendedEventItem> FilteredEvents
+        {
+            get => filteredEvents;
+            set => SetProperty(ref filteredEvents, value);
+        }
+
+        // ✅ Search text property
+        private string searchText = string.Empty;
+        public string SearchText
+        {
+            get => searchText;
+            set
+            {
+                if (SetProperty(ref searchText, value))
+                {
+                    PerformSearch(); // Jab bhi text change ho, search karo
+                }
+            }
+        }
+
+        // ✅ Search logic
+        private void PerformSearch()
+        {
+            if (string.IsNullOrWhiteSpace(SearchText))
+            {
+                // Agar search text empty hai toh sab events dikhaao
+                FilteredEvents = new List<AttendedEventItem>(AttendedEvents);
+            }
+            else
+            {
+                // Filter by title ya branch name
+                var searchLower = SearchText.ToLower();
+                FilteredEvents = AttendedEvents
+                    .Where(e =>
+                        e.Title.ToLower().Contains(searchLower) ||
+                        e.BranchName.ToLower().Contains(searchLower) ||
+                        (e.Description != null && e.Description.ToLower().Contains(searchLower))
+                    )
+                    .ToList();
+            }
         }
 
         private async Task LoadDataAsync()
@@ -69,6 +121,7 @@ namespace Library.ViewModels
                     return;
                 }
 
+                // Updated query - Saari past events
                 var query = @"
                     SELECT
                         e.event_id       AS EventId,
@@ -82,20 +135,25 @@ namespace Library.ViewModels
                         b.branch_name    AS BranchName,
                         er.registration_datetime AS RegistrationDatetime,
                         er.attendance_status     AS AttendanceStatus
-                    FROM event_registrations er
-                    JOIN branch_events e ON er.event_id = e.event_id
+                    FROM branch_events e
                     JOIN branches b ON e.branch_id = b.branch_id
-                    WHERE er.member_id = @memberId AND er.attendance_status = 'Attended'
+                    LEFT JOIN event_registrations er ON e.event_id = er.event_id 
+                        AND er.member_id = @memberId
+                    WHERE e.end_datetime < @currentDateTime
                     ORDER BY e.start_datetime DESC";
 
-                var parameters = new Dictionary<string, object> { { "@memberId", member.MemberId } };
+                var parameters = new Dictionary<string, object>
+                {
+                    { "@memberId", member.MemberId },
+                    { "@currentDateTime", DateTime.Now }
+                };
 
                 var list = await _databaseService.QueryAsync<AttendedEventItem>(query, parameters);
                 AttendedEvents = list ?? new List<AttendedEventItem>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Load attended events error: {ex.Message}");
+                Console.WriteLine($"Load past events error: {ex.Message}");
                 AttendedEvents = new List<AttendedEventItem>();
             }
             finally
@@ -108,21 +166,25 @@ namespace Library.ViewModels
         {
             if (item == null) return;
 
-            // Navigate to your event details page.
-            // Ensure the route "EventDetails" (or "EventDetailsPage") is registered in AppShell with a query parameter "eventId".
-            await Shell.Current.GoToAsync($"EventDetails?eventId={item.EventId}");
+            await Shell.Current.DisplayAlert(
+                "Event Details",
+                $"Title: {item.Title}\nBranch: {item.BranchName}\nDate: {item.StartDatetime:MMM d, yyyy}",
+                "OK"
+            );
         }
 
         private async Task ViewBranchAsync(AttendedEventItem item)
         {
             if (item == null) return;
 
-            // Navigate to branch details. Ensure the route is registered in AppShell and supports query param branchId.
-            await Shell.Current.GoToAsync($"BranchDetails?branchId={item.BranchId}");
+            await Shell.Current.DisplayAlert(
+                "Branch Info",
+                $"Branch: {item.BranchName}",
+                "OK"
+            );
         }
     }
 
-    // Lightweight DTO used for binding the attended events list
     public class AttendedEventItem
     {
         public int EventId { get; set; }
@@ -133,11 +195,7 @@ namespace Library.ViewModels
         public DateTime EndDatetime { get; set; }
         public int MaxCapacity { get; set; }
         public DateTime CreatedAt { get; set; }
-
-        // From branches table
         public string BranchName { get; set; } = string.Empty;
-
-        // From registrations table
         public DateTime RegistrationDatetime { get; set; }
         public string AttendanceStatus { get; set; } = string.Empty;
     }

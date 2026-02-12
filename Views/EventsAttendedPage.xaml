@@ -5,13 +5,27 @@
              x:Name="PageRoot"
              Title="Events Attended">
 
-    <VerticalStackLayout Padding="12" Spacing="8">
-        <Label Text="Events You Attended" FontSize="20" FontAttributes="Bold" />
+    <Grid RowDefinitions="Auto,Auto,*" Padding="12">
+        <!-- Header -->
+        <Label Grid.Row="0" 
+               Text="Events You Attended" 
+               FontSize="20" 
+               FontAttributes="Bold"
+               Margin="0,0,0,8" />
 
-        <RefreshView IsRefreshing="{Binding IsLoading}"
+        <!-- ✅ Search Bar -->
+        <SearchBar Grid.Row="1"
+                   Placeholder="Search events by title or branch..."
+                   Text="{Binding SearchText}"
+                   SearchCommand="{Binding SearchCommand}"
+                   Margin="0,0,0,8" />
+
+        <!-- List with RefreshView -->
+        <RefreshView Grid.Row="2"
+                     IsRefreshing="{Binding IsLoading}"
                      Command="{Binding LoadDataCommand}">
-            <CollectionView ItemsSource="{Binding AttendedEvents}"
-                            EmptyView="No attended events found">
+            <CollectionView ItemsSource="{Binding FilteredEvents}"
+                            EmptyView="No events found">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame Margin="6" Padding="10" CornerRadius="8" HasShadow="True">
@@ -21,13 +35,11 @@
                                 <Label Text="{Binding StartDatetime, StringFormat='{0:MMM d, yyyy h:mm tt}'}" FontSize="14" />
                                 <Label Text="{Binding RegistrationDatetime, StringFormat='Registered: {0:MMM d, yyyy h:mm}'}" FontSize="12" TextColor="Gray" />
                                 <Label Text="{Binding AttendanceStatus}" FontSize="12" TextColor="Green" />
-
                                 <HorizontalStackLayout Spacing="8" HorizontalOptions="End">
                                     <Button Text="View Details"
                                             Command="{Binding BindingContext.ViewEventDetailsCommand, Source={x:Reference PageRoot}}"
                                             CommandParameter="{Binding .}"
                                             FontSize="13" />
-
                                     <Button Text="View Branch"
                                             Command="{Binding BindingContext.ViewBranchCommand, Source={x:Reference PageRoot}}"
                                             CommandParameter="{Binding .}"
@@ -39,5 +51,5 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </RefreshView>
-    </VerticalStackLayout>
+    </Grid>
 </ContentPage>
