@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:Library.Helpers"
+             x:Class="Library.Views.LibrarianDashboardPage"
+             Title="Librarian Dashboard"
+             Shell.NavBarIsVisible="True">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <helpers:IntToBoolConverter x:Key="IntToBoolConverter" />
+            <Color x:Key="LibrarianColor">#4CAF50</Color>
+            <Color x:Key="WarningColor">#FF9800</Color>
+            <Color x:Key="DangerColor">#F44336</Color>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <RefreshView IsRefreshing="{Binding IsLoading}"
+                 Command="{Binding RefreshCommand}">
+        <ScrollView>
+            <VerticalStackLayout Spacing="0" Padding="0">
+
+                <!-- Header -->
+                <Grid BackgroundColor="{StaticResource LibrarianColor}" 
+                      Padding="20,30,20,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <VerticalStackLayout Grid.Row="0" Spacing="8">
+                        <Label Text="Librarian Dashboard" 
+                               FontSize="28"
+                               FontAttributes="Bold"
+                               TextColor="White" />
+                        <Label Text="Manage your library efficiently" 
+                               FontSize="14"
+                               TextColor="White"
+                               Opacity="0.9" />
+                        <Label Text="{Binding LastUpdated, StringFormat='Last updated: {0:hh:mm tt}'}"
+                               FontSize="12"
+                               TextColor="White"
+                               Opacity="0.7" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <!-- Stats Cards -->
+                <Grid Padding="20" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" 
+                      ColumnSpacing="15" RowSpacing="15" BackgroundColor="#F5F5F5">
+
+                    <!-- Total Members -->
+                    <Frame Grid.Row="0" Grid.Column="0"
+                           BackgroundColor="White"
+                           Padding="15"
+                           CornerRadius="12">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Members" FontSize="24" />
+                            <Label Text="{Binding TotalMembers}" 
+                                   FontSize="24" FontAttributes="Bold"
+                                   TextColor="{StaticResource LibrarianColor}" />
+                            <Label Text="Total Members" FontSize="12" TextColor="#666" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Active Loans -->
+                    <Frame Grid.Row="0" Grid.Column="1"
+                           BackgroundColor="White"
+                           Padding="15"
+                           CornerRadius="12">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Loans" FontSize="24" />
+                            <Label Text="{Binding ActiveLoans}" 
+                                   FontSize="24" FontAttributes="Bold"
+                                   TextColor="#2196F3" />
+                            <Label Text="Active Loans" FontSize="12" TextColor="#666" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Overdue Loans -->
+                    <Frame Grid.Row="1" Grid.Column="0"
+                           BackgroundColor="White"
+                           Padding="15"
+                           CornerRadius="12">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Overdue" FontSize="24" />
+                            <Label Text="{Binding OverdueLoans}" 
+                                   FontSize="24" FontAttributes="Bold"
+                                   TextColor="{StaticResource DangerColor}" />
+                            <Label Text="Overdue" FontSize="12" TextColor="#666" />
+                        </VerticalStackLayout>
+                    </Frame>
+
+                    <!-- Available Books -->
+                    <Frame Grid.Row="1" Grid.Column="1"
+                           BackgroundColor="White"
+                           Padding="15"
+                           CornerRadius="12">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Avail Books" FontSize="24" />
+                            <Label Text="{Binding AvailableBooks}" 
+                                   FontSize="24" FontAttributes="Bold"
+                                   TextColor="#4CAF50" />
+                            <Label Text="Available Books" FontSize="12" TextColor="#666" />
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+
+                <!-- Quick Actions -->
+                <VerticalStackLayout Padding="20" Spacing="12">
+                    <Label Text="Quick Actions" 
+                           FontSize="18" FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
+                        <Button Grid.Column="0"
+                                Text="Issue Book"
+                                Command="{Binding QuickIssueBookCommand}"
+                                BackgroundColor="{StaticResource LibrarianColor}"
+                                TextColor="White"
+                                CornerRadius="8" />
+
+                        <Button Grid.Column="1"
+                                Text="Return Book"
+                                Command="{Binding QuickReturnBookCommand}"
+                                BackgroundColor="#2196F3"
+                                TextColor="White"
+                                CornerRadius="8" />
+
+                        <Button Grid.Column="2"
+                                Text="Reports"
+                                Command="{Binding ViewAllReportsCommand}"
+                                BackgroundColor="#FF9800"
+                                TextColor="White"
+                                CornerRadius="8" />
+                    </Grid>
+                </VerticalStackLayout>
+
+                <!-- Recent Loans -->
+                <VerticalStackLayout Padding="20" Spacing="12" BackgroundColor="#F5F5F5">
+                    <HorizontalStackLayout Spacing="10">
+                        <Label Text="Recent Loans" 
+                               FontSize="18" FontAttributes="Bold" />
+                        <Label Text="{Binding RecentLoans.Count}" 
+                               FontSize="14" 
+                               BackgroundColor="{StaticResource LibrarianColor}"
+                               TextColor="White"
+                               Padding="8,2"
+                                />
+                    </HorizontalStackLayout>
+
+                    <CollectionView ItemsSource="{Binding RecentLoans}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="12" Margin="0,0,0,8" CornerRadius="8">
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                            <Label Text="{Binding BookTitle}" 
+                                                   FontAttributes="Bold" />
+                                            <Label Text="{Binding MemberFirstName}" 
+                                                   FontSize="12" TextColor="#666" />
+                                            <Label Text="{Binding DueDatetime, StringFormat='Due: {0:MMM dd}'}" 
+                                                   FontSize="12" 
+                                                   TextColor="{Binding DueDatetime, Converter={StaticResource DueDateColorConverter}}" />
+                                        </VerticalStackLayout>
+                                        <Button Grid.Column="1"
+                                                Text="View"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewLoanDetailsCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#2196F3"
+                                                TextColor="White"
+                                                FontSize="12"
+                                                CornerRadius="5" />
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

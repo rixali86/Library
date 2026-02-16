@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:Library.Views"
+       xmlns:helpers="clr-namespace:Library.Helpers"
+       x:Class="Library.LibrarianShell"
+       Title="Library Management - Librarian"
+       FlyoutBehavior="Flyout">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Colors -->
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Secondary">#FF9800</Color>
+            <Color x:Key="LibrarianColor">#4CAF50</Color>
+            <Color x:Key="Danger">#F44336</Color>
+            <Color x:Key="Warning">#FF9800</Color>
+            <Color x:Key="Success">#4CAF50</Color>
+
+            <!-- Converters -->
+            <helpers:NotEmptyConverter x:Key="NotEmptyConverter" />
+            <helpers:InverseBoolConverter x:Key="InverseBoolConverter" />
+            <helpers:DueDateColorConverter x:Key="DueDateColorConverter" />
+            <helpers:IntToBoolConverter x:Key="IntToBoolConverter" />
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Flyout Header: show current user with librarian badge -->
+    <Shell.FlyoutHeader>
+        <Grid Padding="12" BackgroundColor="{StaticResource LibrarianColor}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="64" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Avatar circle with initials -->
+            <Frame WidthRequest="56" HeightRequest="56"
+                   CornerRadius="28"
+                   BackgroundColor="White"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"
+                   Padding="0">
+                <Label Text="{Binding UserInitials}"
+                       HorizontalTextAlignment="Center"
+                       VerticalTextAlignment="Center"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource LibrarianColor}" />
+            </Frame>
+
+            <StackLayout Grid.Column="1" Padding="8,0" VerticalOptions="Center">
+                <Label Text="{Binding UserName}" FontAttributes="Bold" TextColor="White" />
+                <Label Text="{Binding UserEmail}" FontSize="Micro" TextColor="White" Opacity="0.9" />
+                <Label Text="Librarian" FontSize="Micro" TextColor="White" BackgroundColor="#FFD700" 
+                       Padding="4,0" HorizontalOptions="Start" />
+            </StackLayout>
+        </Grid>
+    </Shell.FlyoutHeader>
+
+    <!-- Flyout Items with Icons -->
+    <FlyoutItem Title="Dashboard" Icon="dashboard.png">
+        <ShellContent Route="LibrarianDashboard"
+                      ContentTemplate="{DataTemplate views:LibrarianDashboardPage}"
+                      Title="Dashboard" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Book Management" Icon="books.png">
+        <ShellContent Route="ManageBooks"
+                      ContentTemplate="{DataTemplate views:ManageBooksPage}"
+                      Title="Manage Books" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Member Management" Icon="members.png">
+        <ShellContent Route="ManageMembers"
+                      ContentTemplate="{DataTemplate views:ManageMembersPage}"
+                      Title="Manage Members" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Transactions" Icon="transactions.png">
+        <ShellContent Route="IssueBook"
+                      ContentTemplate="{DataTemplate views:IssueBookPage}"
+                      Title="Issue Book" />
+        <ShellContent Route="ReturnBook"
+                      ContentTemplate="{DataTemplate views:ReturnBookPage}"
+                      Title="Return Book" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Overdue Books" Icon="overdue.png">
+        <ShellContent Route="OverdueBooks"
+                      ContentTemplate="{DataTemplate views:OverdueBooksPage}"
+                      Title="Overdue Books" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Reports" Icon="reports.png">
+        <ShellContent Route="Reports"
+                      ContentTemplate="{DataTemplate views:ReportsPage}"
+                      Title="Reports" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Fines" Icon="fines.png">
+        <ShellContent Route="Fines"
+                      ContentTemplate="{DataTemplate views:FinesPage}"
+                      Title="Manage Fines" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Branches" Icon="branches.png">
+        <ShellContent Route="Branches"
+                      ContentTemplate="{DataTemplate views:BranchesPage}"
+                      Title="Branches" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Events" Icon="events.png">
+        <ShellContent Route="Events"
+                      ContentTemplate="{DataTemplate views:EventsAttendedPage}"
+                      Title="Events" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Settings" Icon="settings.png">
+        <ShellContent Route="LibrarySettings"
+                      ContentTemplate="{DataTemplate views:LibrarySettingsPage}"
+                      Title="Library Settings" />
+        <ShellContent Route="Settings"
+                      ContentTemplate="{DataTemplate views:SettingsPage}"
+                      Title="My Settings" />
+    </FlyoutItem>
+
+    <!-- Footer with logout button -->
+    <Shell.FlyoutFooter>
+        <StackLayout Padding="12" Spacing="8">
+            <Button Text="Logout"
+                    ImageSource="logout.png"
+                    BackgroundColor="{StaticResource Danger}"
+                    TextColor="White"
+                    Clicked="OnLogoutClicked"
+                    CornerRadius="8"
+                    HeightRequest="40" />
+        </StackLayout>
+    </Shell.FlyoutFooter>
+
+</Shell>

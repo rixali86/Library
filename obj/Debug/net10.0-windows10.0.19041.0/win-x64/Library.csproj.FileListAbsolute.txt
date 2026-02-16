@@ -7,8 +7,8 @@ C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\splashSplashScreen.scale-400.png
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\OpenSans-Regular.ttf
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\OpenSans-Semibold.ttf
-C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\eye_closed.scale-100.png
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\eye_open.scale-100.png
+C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\eye_closed.scale-100.png
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\appiconLargeTile.scale-400.png
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\appiconLargeTile.scale-200.png
 C:\Users\ra626\source\repos\Library\Library\bin\Debug\net10.0-windows10.0.19041.0\win-x64\appiconLargeTile.scale-150.png
@@ -459,8 +459,8 @@ C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\mauifont.stamp
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\f\OpenSans-Regular.ttf
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\f\OpenSans-Semibold.ttf
-C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\r\eye_closed.scale-100.png
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\r\eye_open.scale-100.png
+C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\r\eye_closed.scale-100.png
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\r\appiconLargeTile.scale-400.png
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\r\appiconLargeTile.scale-200.png
 C:\Users\ra626\source\repos\Library\Library\obj\Debug\net10.0-windows10.0.19041.0\win-x64\resizetizer\r\appiconLargeTile.scale-150.png

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:helpers="clr-namespace:Library.Helpers"
+             x:Class="Library.Views.MemberLoansPage"
+             Title="Member Loans"
+             BackgroundColor="{DynamicResource PageBackgroundColor}">
+
+	<ContentPage.Resources>
+		<ResourceDictionary>
+			<helpers:DueDateColorConverter x:Key="DueDateColorConverter" />
+			<Color x:Key="Primary">#2196F3</Color>
+		</ResourceDictionary>
+	</ContentPage.Resources>
+
+	<Grid RowDefinitions="Auto,*" Padding="12" RowSpacing="12">
+		<!-- Member Info Header -->
+		<Frame Grid.Row="0" Padding="16" CornerRadius="8" BackgroundColor="#E3F2FD">
+			<Grid ColumnDefinitions="Auto,*" ColumnSpacing="12">
+				<Frame Grid.Column="0"
+                       WidthRequest="50" HeightRequest="50"
+                       CornerRadius="25"
+                       BackgroundColor="{StaticResource Primary}">
+					<Label Text="{Binding MemberInitials}"
+                           TextColor="White"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center" />
+				</Frame>
+
+				<VerticalStackLayout Grid.Column="1" Spacing="4">
+					<Label Text="{Binding MemberName}"
+                           FontSize="18"
+                           FontAttributes="Bold" />
+					<Label Text="{Binding MemberEmail}"
+                           FontSize="14"
+                           TextColor="Gray" />
+					<Label Text="{Binding MembershipStatus}"
+                           FontSize="12"
+                           TextColor="{Binding StatusColor}" />
+				</VerticalStackLayout>
+			</Grid>
+		</Frame>
+
+		<!-- Loans List -->
+		<CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Loans}">
+			<CollectionView.ItemTemplate>
+				<DataTemplate>
+					<Frame Padding="12" Margin="0,4" CornerRadius="8">
+						<Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto" RowSpacing="4">
+							<Label Grid.Row="0" Grid.Column="0"
+                                   Text="{Binding BookTitle}"
+                                   FontSize="16"
+                                   FontAttributes="Bold" />
+
+							<Label Grid.Row="1" Grid.Column="0"
+                                   Text="{Binding Barcode}"
+                                   FontSize="12"
+                                   TextColor="Gray" />
+
+							<HorizontalStackLayout Grid.Row="2" Grid.Column="0" Spacing="8">
+								<Label Text="Due:" FontSize="12" TextColor="Gray" />
+								<Label Text="{Binding DueDatetime, StringFormat='{0:MMM dd, yyyy}'}"
+                                       FontSize="12"
+                                       TextColor="{Binding DueDatetime, Converter={StaticResource DueDateColorConverter}}" />
+								<Label Text="•" FontSize="12" TextColor="Gray" />
+								<Label Text="{Binding Status}"
+                                       FontSize="12"
+                                       TextColor="#4CAF50" />
+							</HorizontalStackLayout>
+
+							<Frame Grid.Row="0" Grid.Column="1" Grid.RowSpan="3"
+                                   BackgroundColor="#FF9800"
+                                   Padding="8,4"
+                                   CornerRadius="15"
+                                   VerticalOptions="Center"
+                                   IsVisible="{Binding IsOverdue}">
+								<Label Text="OVERDUE"
+                                       FontSize="10"
+                                       FontAttributes="Bold"
+                                       TextColor="White" />
+							</Frame>
+						</Grid>
+					</Frame>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+			<CollectionView.EmptyView>
+				<VerticalStackLayout Padding="40" Spacing="20" HorizontalOptions="Center">
+					<Label Text="📚" FontSize="48" HorizontalOptions="Center" Opacity="0.5" />
+					<Label Text="No loans found for this member"
+                           FontSize="16"
+                           TextColor="Gray"
+                           HorizontalOptions="Center" />
+				</VerticalStackLayout>
+			</CollectionView.EmptyView>
+		</CollectionView>
+
+		<ActivityIndicator Grid.Row="1"
+                           IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           VerticalOptions="Center" />
+	</Grid>
+</ContentPage>

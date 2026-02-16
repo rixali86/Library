@@ -437,33 +437,36 @@ BackgroundColor="White">
 
                                             <!-- Event Details -->
                                             <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                                <Label Text="{Binding EventName}" 
-                                                       FontSize="16"
-                                                       FontAttributes="Bold"
-                                                       TextColor="#1E293B"
-                                                       LineBreakMode="WordWrap" />
+
+                                                <Label Text="{Binding Title}" 
+           FontSize="16"
+           FontAttributes="Bold"
+           TextColor="#1E293B"
+           LineBreakMode="WordWrap" />
 
                                                 <HorizontalStackLayout Spacing="5">
                                                     <Label Text="🕒" FontSize="12" />
-                                                    <Label Text="{Binding EventDate, StringFormat='{0:h:mm tt}'}" 
-                                                           FontSize="12"
-                                                           TextColor="#64748B" />
+                                                    <Label Text="{Binding StartDatetime, StringFormat='{0:h:mm tt}'}" 
+               FontSize="12"
+               TextColor="#64748B" />
                                                 </HorizontalStackLayout>
 
                                                 <HorizontalStackLayout Spacing="5">
                                                     <Label Text="📍" FontSize="12" />
-                                                    <Label Text="{Binding Location}" 
-                                                           FontSize="12"
-                                                           TextColor="#64748B"
-                                                           LineBreakMode="TailTruncation" />
+                                                    <Label Text="{Binding BranchName}" 
+               FontSize="12"
+               TextColor="#64748B"
+               LineBreakMode="TailTruncation" />
                                                 </HorizontalStackLayout>
 
                                                 <Label Text="{Binding Description}" 
-                                                       FontSize="12"
-                                                       TextColor="#94A3B8"
-                                                       LineBreakMode="WordWrap"
-                                                       MaxLines="2" />
+           FontSize="12"
+           TextColor="#94A3B8"
+           LineBreakMode="WordWrap"
+           MaxLines="2" />
+
                                             </VerticalStackLayout>
+
                                         </Grid>
                                     </Border>
                                 </DataTemplate>

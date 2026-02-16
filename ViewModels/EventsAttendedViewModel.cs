@@ -8,7 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Library.ViewModels
+namespace Library.ViewModels 
 {
     public partial class EventsAttendedViewModel : ObservableObject
     {

@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Library.Views.LibrarySettingsPage"
+             Title="Library Settings">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="16" Spacing="20">
+
+            <!-- Loan Rules -->
+            <Frame Padding="16" CornerRadius="12">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Loan Rules" FontSize="18" FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="12">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Default Loan Period (days)" FontSize="14" />
+                        <Entry Grid.Row="0" Grid.Column="1" 
+                               Text="{Binding Settings.DefaultLoanDays}" 
+                               Keyboard="Numeric" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Max Books Per Member" FontSize="14" />
+                        <Entry Grid.Row="1" Grid.Column="1" 
+                               Text="{Binding Settings.MaxBooksPerMember}" 
+                               Keyboard="Numeric" />
+
+                        <Label Grid.Row="2" Grid.Column="0" Text="Fine Per Day ($)" FontSize="14" />
+                        <Entry Grid.Row="2" Grid.Column="1" 
+                               Text="{Binding Settings.FinePerDay}" 
+                               Keyboard="Numeric" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Membership Settings -->
+            <Frame Padding="16" CornerRadius="12">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Membership Settings" FontSize="18" FontAttributes="Bold" />
+
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="12" ColumnSpacing="12">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Membership Duration (days)" FontSize="14" />
+                        <Entry Grid.Row="0" Grid.Column="1" 
+                               Text="{Binding Settings.MembershipDuration}" 
+                               Keyboard="Numeric" />
+
+                        <Label Grid.Row="1" Grid.Column="0" Text="Allow Guest Registration" FontSize="14" />
+                        <Switch Grid.Row="1" Grid.Column="1" 
+                                IsToggled="{Binding Settings.AllowGuestRegistration}" 
+                                HorizontalOptions="Start" />
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Notification Settings -->
+            <Frame Padding="16" CornerRadius="12">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Notifications" FontSize="18" FontAttributes="Bold" />
+
+                    <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="12">
+                        <Grid Row="0" ColumnDefinitions="*,*">
+                            <Label Grid.Column="0" Text="Send Email Reminders" FontSize="14" />
+                            <Switch Grid.Column="1" 
+                                    IsToggled="{Binding Settings.SendEmailReminders}" 
+                                    HorizontalOptions="Start" />
+                        </Grid>
+
+                        <Grid Row="1" ColumnDefinitions="*,*">
+                            <Label Grid.Column="0" Text="Send SMS Reminders" FontSize="14" />
+                            <Switch Grid.Column="1" 
+                                    IsToggled="{Binding Settings.SendSmsReminders}" 
+                                    HorizontalOptions="Start" />
+                        </Grid>
+
+                        <Grid Row="2" ColumnDefinitions="*,*">
+                            <Label Grid.Column="0" Text="Reminder Days Before Due" FontSize="14" />
+                            <Entry Grid.Column="1" 
+                                   Text="{Binding Settings.ReminderDaysBeforeDue}" 
+                                   Keyboard="Numeric" />
+                        </Grid>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Branch Hours -->
+            <Frame Padding="16" CornerRadius="12">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Branch Hours" FontSize="18" FontAttributes="Bold" />
+
+                    <Picker Title="Select Branch"
+                            ItemsSource="{Binding Branches}"
+                            ItemDisplayBinding="{Binding BranchName}"
+                            SelectedItem="{Binding SelectedBranch}"
+                            SelectedIndexChangedCommand="{Binding LoadBranchHoursCommand}" />
+
+                    <CollectionView ItemsSource="{Binding BranchHours}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ColumnDefinitions="*,*,*" Padding="0,4">
+                                    <Label Grid.Column="0" Text="{Binding DayOfWeek}" FontSize="14" />
+                                    <Label Grid.Column="1" Text="{Binding OpenTime}" FontSize="14" />
+                                    <Label Grid.Column="2" Text="{Binding CloseTime}" FontSize="14" />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Button Text="Update Hours"
+                            Command="{Binding UpdateHoursCommand}"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Save Button -->
+            <Button Text="Save All Settings"
+                    Command="{Binding SaveSettingsCommand}"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="50" />
+
+            <ActivityIndicator IsRunning="{Binding IsSaving}"
+                               IsVisible="{Binding IsSaving}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

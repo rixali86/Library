@@ -1,7 +1,10 @@
 ﻿using Library.Services;
-using System;
+using Microsoft.Maui;
 using Microsoft.Maui.Controls;
+using Microsoft.Maui.Dispatching;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+
 namespace Library;
 
 public partial class App : Application
@@ -11,51 +14,88 @@ public partial class App : Application
     public App(IServiceProvider serviceProvider)
     {
         InitializeComponent();
+
         _serviceProvider = serviceProvider;
 
-        // Load session and determine which shell to show
-        InitializeApp();
+        // Temporary page so app can load safely
+        MainPage = new ContentPage
+        {
+            Content = new ActivityIndicator
+            {
+                IsRunning = true,
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center
+            }
+        };
+
+        // Run after UI is ready
+        Dispatcher.Dispatch(async () =>
+        {
+            await InitializeAppAsync();
+        });
     }
 
-    // Expose the IServiceProvider so pages can resolve services when needed.
-    // Prefer constructor injection for pages/viewmodels where possible.
     public IServiceProvider Services => _serviceProvider;
 
-    private async void InitializeApp()
+    // Now returns Task (NOT void)
+    private async Task InitializeAppAsync()
     {
-        // Load session from secure storage
-        await UserSession.Instance.LoadSessionAsync();
+        try
+        {
+            // Load session safely
+            await UserSession.Instance.LoadSessionAsync();
 
 #if DEBUG
-        // Development helper: always show login page on startup so dashboard doesn't open automatically.
-        var authShellDev = _serviceProvider.GetRequiredService<AuthShell>();
-        MainPage = authShellDev;
-        return;
+            var devShell = _serviceProvider.GetRequiredService<AuthShell>();
+            MainPage = devShell;
+            return;
 #endif
 
-        // Production behavior: show main shell if authenticated, otherwise show auth shell.
-        if (UserSession.Instance.IsAuthenticated)
-        {
-            // User is logged in - show MainShell
-            var mainShell = _serviceProvider.GetRequiredService<AppShell>();
-            MainPage = mainShell;
+            if (UserSession.Instance.IsAuthenticated)
+            {
+                var mainShell = _serviceProvider.GetRequiredService<AppShell>();
+                MainPage = mainShell;
+            }
+            else
+            {
+                var authShell = _serviceProvider.GetRequiredService<AuthShell>();
+                MainPage = authShell;
+            }
         }
-        else
+        catch (Exception ex)
         {
-            // User is not logged in - show AuthShell
+            // If anything fails → show login
+            System.Diagnostics.Debug.WriteLine(ex);
+
             var authShell = _serviceProvider.GetRequiredService<AuthShell>();
             MainPage = authShell;
         }
     }
 
-    // Method to switch to MainShell after successful login
     public void SwitchToMainShell()
     {
-        var mainShell = _serviceProvider.GetRequiredService<AppShell>();
-        MainPage = mainShell;
+        MainPage = new AppShell(
+            Handler.MauiContext.Services.GetService<IAuthService>(),
+            Handler.MauiContext.Services.GetService<IDatabaseService>()
+        );
+
+        // Navigate based on role
+        MainThread.BeginInvokeOnMainThread(async () =>
+        {
+            var role = UserSession.Instance.UserRole;
+
+            if (role == "Librarian")
+            {
+                await Shell.Current.GoToAsync("//LibrarianDashboard");
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("//MemberDashboard");
+            }
+        });
     }
 
-    // Method to switch back to AuthShell after logout
+
     public void SwitchToAuthShell()
     {
         var authShell = _serviceProvider.GetRequiredService<AuthShell>();

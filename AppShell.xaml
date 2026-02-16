@@ -4,15 +4,17 @@
        xmlns:views="clr-namespace:Library.Views"
        xmlns:helpers="clr-namespace:Library.Helpers"
        x:Class="Library.AppShell"
-       Title="Library Management System">
+       Title="Library Management System"
+       FlyoutBehavior="Flyout">
 
+    <!-- ================= RESOURCES ================= -->
     <Shell.Resources>
         <ResourceDictionary>
-            <!-- Colors -->
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="Secondary">#FF9800</Color>
+            <Color x:Key="MemberColor">#2196F3</Color>
+            <Color x:Key="LibrarianColor">#9C27B0</Color>
 
-            <!-- Converters -->
             <helpers:NotEmptyConverter x:Key="NotEmptyConverter" />
             <helpers:InverseBoolConverter x:Key="InverseBoolConverter" />
             <helpers:DueDateColorConverter x:Key="DueDateColorConverter" />
@@ -20,15 +22,14 @@
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!-- Flyout Header: show current user -->
+    <!-- ================= HEADER ================= -->
     <Shell.FlyoutHeader>
-        <Grid Padding="12" BackgroundColor="{StaticResource Primary}">
+        <Grid Padding="12" BackgroundColor="{StaticResource MemberColor}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="64" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <!-- simple avatar circle with initials -->
             <Frame WidthRequest="56" HeightRequest="56"
                    CornerRadius="28"
                    BackgroundColor="White"
@@ -39,60 +40,86 @@
                        HorizontalTextAlignment="Center"
                        VerticalTextAlignment="Center"
                        FontAttributes="Bold"
-                       TextColor="{StaticResource Primary}" />
+                       TextColor="{StaticResource MemberColor}" />
             </Frame>
 
             <StackLayout Grid.Column="1" Padding="8,0" VerticalOptions="Center">
-                <Label Text="{Binding UserName}" FontAttributes="Bold" TextColor="White" />
-                <Label Text="{Binding UserEmail}" FontSize="Micro" TextColor="White" Opacity="0.9" />
+                <Label Text="{Binding UserName}" 
+                       FontAttributes="Bold" 
+                       TextColor="White" />
+
+                <Label Text="{Binding UserEmail}" 
+                       FontSize="Micro" 
+                       TextColor="White" 
+                       Opacity="0.9" />
+
+                <!-- 🔥 Dynamic Role Label -->
+                <Label Text="{Binding UserRole}" 
+                       FontSize="Micro"
+                       TextColor="White"
+                       BackgroundColor="#4CAF50"
+                       Padding="4,0"
+                       HorizontalOptions="Start" />
             </StackLayout>
         </Grid>
     </Shell.FlyoutHeader>
 
-    <!-- Flyout content -->
-    <FlyoutItem Title="Home" Icon="home.png">
-        <ShellContent Route="Dashboard"
-                      ContentTemplate="{DataTemplate views:DashboardPage}"
-                      Title="Dashboard" />
+    <!-- ================= MEMBER MENU ================= -->
+
+    <FlyoutItem Title="Dashboard" Icon="home.png"
+                IsVisible="{Binding IsMember}">
+        <ShellContent Route="MemberDashboard"
+                      ContentTemplate="{DataTemplate views:DashboardPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Search Books" Icon="book.png">
+    <FlyoutItem Title="Search Books" Icon="book.png"
+                IsVisible="{Binding IsMember}">
         <ShellContent Route="Search"
-                      ContentTemplate="{DataTemplate views:SearchBookPage}"
-                      Title="Search Books" />
+                      ContentTemplate="{DataTemplate views:SearchBookPage}" />
     </FlyoutItem>
 
-  
-
-    <FlyoutItem Title="Branches" Icon="branches.png">
-        <ShellContent Route="Branches"
-                      ContentTemplate="{DataTemplate views:BranchesPage}"
-                      Title="Branches" />
-    </FlyoutItem>
-
-    <FlyoutItem Title="Events" Icon="events.png">
+    <FlyoutItem Title="Events" Icon="events.png"
+                IsVisible="{Binding IsMember}">
         <ShellContent Route="Events"
-                      ContentTemplate="{DataTemplate views:EventsAttendedPage}"
-                      Title="Events" />
+                      ContentTemplate="{DataTemplate views:EventsAttendedPage}" />
     </FlyoutItem>
 
-    <FlyoutItem Title="Account" Icon="profile.png">
+    <FlyoutItem Title="Account" Icon="profile.png"
+                IsVisible="{Binding IsMember}">
         <ShellContent Route="Profile"
-                      ContentTemplate="{DataTemplate views:MemberProfilePage}"
-                      Title="My Profile" />
-        <ShellContent Route="Setting"
-                      ContentTemplate="{DataTemplate views:SettingsPage}"
-                      Title="Settings" />
+                      ContentTemplate="{DataTemplate views:MemberProfilePage}" />
+        <ShellContent Route="Settings"
+                      ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
 
-    <!-- Footer with buttons (MenuItem cannot be placed inside a View collection) -->
+    <!-- ================= LIBRARIAN MENU ================= -->
+
+    <FlyoutItem Title="Librarian Dashboard" Icon="admin.png"
+                IsVisible="{Binding IsLibrarian}">
+        <ShellContent Route="LibrarianDashboard"
+                      ContentTemplate="{DataTemplate views:LibrarianDashboardPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Manage Books" Icon="book.png"
+                IsVisible="{Binding IsLibrarian}">
+        <ShellContent Route="ManageBooks"
+                      ContentTemplate="{DataTemplate views:ManageBooksPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Manage Members" Icon="users.png"
+                IsVisible="{Binding IsLibrarian}">
+        <ShellContent Route="ManageMembers"
+                      ContentTemplate="{DataTemplate views:ManageMembersPage}" />
+    </FlyoutItem>
+
+    <!-- ================= FOOTER ================= -->
+
     <Shell.FlyoutFooter>
         <StackLayout Padding="12" Spacing="8">
-            <Button Text="Settings"
-                    ImageSource="settings.png"
-                    Command="{Binding GoToSettingsCommand}" />
             <Button Text="Logout"
                     ImageSource="logout.png"
+                    BackgroundColor="#FF4444"
+                    TextColor="White"
                     Clicked="OnLogoutClicked" />
         </StackLayout>
     </Shell.FlyoutFooter>

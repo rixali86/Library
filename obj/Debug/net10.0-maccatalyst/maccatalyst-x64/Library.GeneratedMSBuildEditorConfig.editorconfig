@@ -56,6 +56,16 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
+[C:/Users/ra626/source/repos/Library/Library/LibrarianShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.LibrarianShell.xaml
+build_metadata.AdditionalFiles.TargetPath = LibrarianShell.xaml
+build_metadata.AdditionalFiles.RelativePath = LibrarianShell.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
 [C:/Users/ra626/source/repos/Library/Library/MainPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Library.MainPage.xaml
@@ -81,6 +91,16 @@ build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Library.Resources.Styles.Styles.xaml
 build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
 build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/AddEditBookPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.AddEditBookPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\AddEditBookPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\AddEditBookPage.xaml
 build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
@@ -126,11 +146,81 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
+[C:/Users/ra626/source/repos/Library/Library/Views/FinesPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.FinesPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\FinesPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\FinesPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/IssueBookPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.IssueBookPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\IssueBookPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\IssueBookPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/LibrarianDashboardPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.LibrarianDashboardPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\LibrarianDashboardPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\LibrarianDashboardPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/LibrarySettingsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.LibrarySettingsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\LibrarySettingsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\LibrarySettingsPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
 [C:/Users/ra626/source/repos/Library/Library/Views/LoginPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.LoginPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\LoginPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\LoginPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/ManageBooksPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.ManageBooksPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ManageBooksPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ManageBooksPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/ManageMembersPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.ManageMembersPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ManageMembersPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ManageMembersPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/MemberLoansPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.MemberLoansPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\MemberLoansPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\MemberLoansPage.xaml
 build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 
@@ -146,11 +236,41 @@ build_metadata.AdditionalFiles.NoWarn =
 build_metadata.AdditionalFiles.EnableDiagnostics = 
 build_metadata.AdditionalFiles.LineInfo = 
 
+[C:/Users/ra626/source/repos/Library/Library/Views/OverdueBooksPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.OverdueBooksPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\OverdueBooksPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\OverdueBooksPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
 [C:/Users/ra626/source/repos/Library/Library/Views/RegisterPage.xaml]
 build_metadata.AdditionalFiles.GenKind = Xaml
 build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.RegisterPage.xaml
 build_metadata.AdditionalFiles.TargetPath = Views\RegisterPage.xaml
 build_metadata.AdditionalFiles.RelativePath = Views\RegisterPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/ReportsPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.ReportsPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ReportsPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ReportsPage.xaml
+build_metadata.AdditionalFiles.Inflator = Runtime
+build_metadata.AdditionalFiles.NoWarn = 
+build_metadata.AdditionalFiles.EnableDiagnostics = 
+build_metadata.AdditionalFiles.LineInfo = 
+
+[C:/Users/ra626/source/repos/Library/Library/Views/ReturnBookPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = Library.Views.ReturnBookPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Views\ReturnBookPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Views\ReturnBookPage.xaml
 build_metadata.AdditionalFiles.Inflator = Runtime
 build_metadata.AdditionalFiles.NoWarn = 
 build_metadata.AdditionalFiles.EnableDiagnostics = 

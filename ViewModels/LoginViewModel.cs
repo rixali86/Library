@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Library.Services;
+using System;
 using System.Threading.Tasks;
+using Microsoft.Maui.Controls;
 
 namespace Library.ViewModels;
 
@@ -26,6 +28,12 @@ public partial class LoginViewModel : ObservableObject
 
     public string EyeIcon => IsPasswordHidden ? "eye_closed.png" : "eye_open.png";
 
+    public LoginViewModel(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
+    // Show / Hide Password
     [RelayCommand]
     private void TogglePassword()
     {
@@ -33,15 +41,13 @@ public partial class LoginViewModel : ObservableObject
         OnPropertyChanged(nameof(EyeIcon));
     }
 
-    public LoginViewModel(IAuthService authService)
-    {
-        _authService = authService;
-    }
-
+    
+    // Login
     [RelayCommand]
     private async Task LoginAsync()
     {
-        if (string.IsNullOrWhiteSpace(Email) || string.IsNullOrWhiteSpace(Password))
+        if (string.IsNullOrWhiteSpace(Email) ||
+            string.IsNullOrWhiteSpace(Password))
         {
             ErrorMessage = "Please enter both email and password";
             return;
@@ -56,12 +62,20 @@ public partial class LoginViewModel : ObservableObject
 
             if (success)
             {
-                // Start user session
-                await UserSession.Instance.StartSessionAsync(Email);
+                // Load user
+                await _authService.GetCurrentUserAsync();
 
-                // Switch to MainShell
-                var mainShell = Application.Current.Handler.MauiContext.Services.GetService<AppShell>();
-                Application.Current.MainPage = mainShell;
+                // Start session
+                await UserSession.Instance.StartSessionAsync(
+                    Email,
+                    _authService.CurrentUserRole,
+                    _authService.CurrentUserId);
+
+                // Switch to main shell (NO PARAMETER)
+                if (Application.Current is App app)
+                {
+                    app.SwitchToMainShell();
+                }
             }
             else
             {
@@ -70,7 +84,7 @@ public partial class LoginViewModel : ObservableObject
         }
         catch (Exception ex)
         {
-            ErrorMessage = $"Login failed: {ex.Message}";
+            ErrorMessage = "Login failed: " + ex.Message;
         }
         finally
         {
@@ -78,19 +92,21 @@ public partial class LoginViewModel : ObservableObject
         }
     }
 
+    // Go to Register Page
     [RelayCommand]
     private async Task GoToRegisterAsync()
     {
         await Shell.Current.GoToAsync("//Register");
     }
 
-    // Added: clear credentials and UI state (called when login page appears or on logout)
+    // Clear Fields
     public void ClearCredentials()
     {
         Email = string.Empty;
         Password = string.Empty;
         ErrorMessage = string.Empty;
         IsPasswordHidden = true;
+
         OnPropertyChanged(nameof(EyeIcon));
     }
 }

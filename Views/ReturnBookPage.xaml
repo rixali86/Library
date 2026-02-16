@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:Library.Models"
+             x:Class="Library.Views.ReturnBookPage"
+             Title="Return Books"
+             BackgroundColor="#F5F5F5">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto"
+          ColumnDefinitions="*,*"
+          Padding="15"
+          RowSpacing="15">
+
+        <!-- Quick Return Card -->
+        <Border Grid.Row="0"
+                Grid.ColumnSpan="2"
+                StrokeThickness="0"
+                BackgroundColor="#2196F3"
+                Padding="20">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="15">
+                <Label Text="📱 Quick Return by Barcode"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       TextColor="White"/>
+
+                <HorizontalStackLayout Spacing="10">
+                    <Entry Text="{Binding BarcodeInput}"
+                           Placeholder="Scan or enter barcode"
+                           PlaceholderColor="#B0FFFFFF"
+                           BackgroundColor="White"
+                           FontSize="16"
+                           HorizontalOptions="FillAndExpand"
+                           ReturnCommand="{Binding SearchByBarcodeCommand}"/>
+
+                    <Button Text="Search"
+                            Command="{Binding SearchByBarcodeCommand}"
+                            BackgroundColor="#FFC107"
+                            TextColor="Black"
+                            WidthRequest="80"
+                            CornerRadius="8"/>
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Member Selection Section -->
+        <Border Grid.Row="1"
+                Grid.ColumnSpan="2"
+                StrokeThickness="0"
+                BackgroundColor="White"
+                Padding="15">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="12">
+                <Label Text="👤 Select Member"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#333333"/>
+
+                <Picker Title="Choose member..."
+                        ItemsSource="{Binding Members}"
+                        SelectedItem="{Binding SelectedMember}"
+                        ItemDisplayBinding="{Binding FirstName}"
+                        BackgroundColor="#F8F9FA"
+                        FontSize="15">
+                    <Picker.Behaviors>
+                        <EventToCommandBehavior EventName="SelectedIndexChanged"
+                                                Command="{Binding LoadMemberLoansCommand}"
+                                                CommandParameter="{Binding SelectedMember}" />
+                    </Picker.Behaviors>
+                </Picker>
+
+                <Button Text="Refresh Members List"
+                        Command="{Binding LoadMembersCommand}"
+                        BackgroundColor="#E9ECEF"
+                        TextColor="#495057"
+                        CornerRadius="8"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Loans List Section -->
+        <Border Grid.Row="2"
+                Grid.ColumnSpan="2"
+                StrokeThickness="0"
+                BackgroundColor="White"
+                Padding="15">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10" />
+            </Border.StrokeShape>
+
+            <Grid RowDefinitions="Auto,Auto,*">
+                <!-- Header with Fine Info -->
+                <HorizontalStackLayout Grid.Row="0"
+                                       Margin="0,0,0,15"
+                                       Spacing="10">
+                    <Label Text="📚 Active Loans"
+                           FontSize="16"
+                           FontAttributes="Bold"
+                           TextColor="#333333"
+                           VerticalOptions="Center"/>
+
+                    <Border x:Name="FineBorder"
+                            BackgroundColor="{Binding HasFines, Converter={StaticResource BoolToColor}}"
+                            Padding="8,4"
+                            HorizontalOptions="End"
+                            IsVisible="{Binding HasFines}">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="6" />
+                        </Border.StrokeShape>
+
+                        <Label Text="{Binding TotalFine, StringFormat='Total Fine: ${0:F2}'}"
+                               TextColor="White"
+                               FontSize="14"
+                               FontAttributes="Bold"/>
+                    </Border>
+                </HorizontalStackLayout>
+
+                <!-- Activity Indicator -->
+                <ActivityIndicator Grid.Row="1"
+                                   IsRunning="{Binding IsProcessing}"
+                                   IsVisible="{Binding IsProcessing}"
+                                   Color="#2196F3"
+                                   HeightRequest="40"/>
+
+                <!-- Loans CollectionView -->
+                <CollectionView Grid.Row="2"
+                                ItemsSource="{Binding MemberLoans}"
+                                IsVisible="{Binding !IsProcessing}"
+                                SelectionMode="None"
+                                EmptyView="No active loans for this member">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Loan">
+                            <Border Margin="0,0,0,8"
+                                    Padding="12"
+                                    BackgroundColor="#F8F9FA">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="8" />
+                                </Border.StrokeShape>
+
+                                <Grid ColumnDefinitions="*,Auto,Auto"
+                                      RowDefinitions="Auto,Auto,Auto"
+                                      RowSpacing="4">
+
+                                    <!-- Book Title -->
+                                    <Label Grid.Row="0"
+                                           Grid.Column="0"
+                                           Grid.ColumnSpan="3"
+                                           Text="{Binding BookTitle}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#333333"
+                                           LineBreakMode="TailTruncation"/>
+
+                                    <!-- Barcode -->
+                                    <Label Grid.Row="1"
+                                           Grid.Column="0"
+                                           Text="{Binding Barcode, StringFormat='📖 Barcode: {0}'}"
+                                           FontSize="13"
+                                           TextColor="#666666"/>
+
+                                    <!-- Due Date -->
+                                    <Label Grid.Row="2"
+                                           Grid.Column="0"
+                                           Text="{Binding DueDatetime, StringFormat='📅 Due: {0:MMM dd, yyyy}'}"
+                                           FontSize="13"
+                                           TextColor="{Binding DueDatetime, Converter={StaticResource DueDateColor}}"/>
+
+                                    <!-- Overdue Badge -->
+                                    <Border Grid.Row="2"
+                                            Grid.Column="1"
+                                            Padding="6,2"
+                                            BackgroundColor="#DC3545"
+                                            IsVisible="{Binding DaysOverdue, Converter={StaticResource IsGreaterThanZero}}">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="4" />
+                                        </Border.StrokeShape>
+                                        <Label Text="{Binding DaysOverdue, StringFormat='⚠ {0} days overdue'}"
+                                               TextColor="White"
+                                               FontSize="11"
+                                               FontAttributes="Bold"/>
+                                    </Border>
+
+                                    <!-- Return Button -->
+                                    <Button Grid.Row="1"
+                                            Grid.RowSpan="2"
+                                            Grid.Column="2"
+                                            Text="Return"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:ReturnBookViewModel}}, Path=ReturnBookCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#28A745"
+                                            TextColor="White"
+                                            FontSize="12"
+                                            WidthRequest="60"
+                                            HeightRequest="35"
+                                            CornerRadius="6"
+                                            Margin="8,0,0,0"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
+
+        <!-- Action Buttons Section -->
+        <HorizontalStackLayout Grid.Row="3"
+                               Grid.ColumnSpan="2"
+                               Spacing="10"
+                               Margin="0,10,0,0">
+
+            <Button Text="💰 Pay Fines"
+                    Command="{Binding PayFinesCommand}"
+                    BackgroundColor="#28A745"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HorizontalOptions="FillAndExpand"
+                    IsEnabled="{Binding HasFines}"/>
+
+            <Button Text="⏭️ Skip Payment"
+                    Command="{Binding ReturnWithoutPaymentCommand}"
+                    BackgroundColor="#6C757D"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HorizontalOptions="FillAndExpand"/>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

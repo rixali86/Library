@@ -4,17 +4,20 @@
        xmlns:views="clr-namespace:Library.Views"
        x:Class="Library.AuthShell"
        Title="Library - Authentication"
-       FlyoutBehavior="Disabled">
+       FlyoutBehavior="Disabled"
+       BackgroundColor="{DynamicResource PageBackgroundColor}">
 
     <Shell.Resources>
         <ResourceDictionary>
             <!-- Colors -->
             <Color x:Key="Primary">#2196F3</Color>
             <Color x:Key="Secondary">#FF9800</Color>
+            <Color x:Key="BackgroundGradientStart">#667eea</Color>
+            <Color x:Key="BackgroundGradientEnd">#764ba2</Color>
         </ResourceDictionary>
     </Shell.Resources>
 
-    <!-- Login Page -->
+    <!-- Login Page (Default) -->
     <ShellContent Route="Login"
                   ContentTemplate="{DataTemplate views:LoginPage}"
                   Title="Login" />

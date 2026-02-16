@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Library.Views.ManageMembersPage"
+             Title="Manage Members">
+
+    <Grid RowDefinitions="Auto,Auto,*" Padding="12" RowSpacing="12">
+        <!-- Search Bar -->
+        <SearchBar Grid.Row="0"
+                   Placeholder="Search by name, email, or phone..."
+                   Text="{Binding SearchQuery}"
+                   SearchCommand="{Binding SearchCommand}" />
+
+        <!-- Quick Stats -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="8">
+            <Frame Grid.Column="0" Padding="8" CornerRadius="8">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Total" FontSize="12" TextColor="Gray" />
+                    <Label Text="{Binding TotalMembers}" FontSize="18" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame Grid.Column="1" Padding="8" CornerRadius="8" BackgroundColor="#4CAF5010">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Active" FontSize="12" TextColor="Gray" />
+                    <Label Text="{Binding ActiveMembers}" FontSize="18" FontAttributes="Bold" TextColor="#4CAF50" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame Grid.Column="2" Padding="8" CornerRadius="8" BackgroundColor="#F4433610">
+                <VerticalStackLayout Spacing="4">
+                    <Label Text="Suspended" FontSize="12" TextColor="Gray" />
+                    <Label Text="{Binding SuspendedMembers}" FontSize="18" FontAttributes="Bold" TextColor="#F44336" />
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+
+        <!-- Members List -->
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding Members}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView>
+                        <SwipeView.RightItems>
+                            <SwipeItems Mode="Reveal">
+                                <SwipeItem Text="Edit" 
+                                           BackgroundColor="#2196F3"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.EditMemberCommand}"
+                                           CommandParameter="{Binding .}" />
+                                <SwipeItem Text="Loans" 
+                                           BackgroundColor="#FF9800"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ViewLoansCommand}"
+                                           CommandParameter="{Binding .}" />
+                                <SwipeItem Text="Suspend" 
+                                           BackgroundColor="#F44336"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ToggleStatusCommand}"
+                                           CommandParameter="{Binding .}" />
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Frame Padding="12" Margin="0,4" CornerRadius="8">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                    <Label Text="{Binding FullName}" 
+                                           FontSize="16" FontAttributes="Bold" />
+                                    <Label Text="{Binding Email}" FontSize="14" TextColor="Gray" />
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Label Text="{Binding Phone}" FontSize="12" TextColor="Gray" />
+                                        <Label Text="•" FontSize="12" TextColor="Gray" />
+                                        <Label Text="{Binding RegisteredDate, StringFormat='Joined: {0:MMM dd, yyyy}'}" 
+                                               FontSize="12" TextColor="Gray" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+
+                                <Frame Grid.Column="1"
+                                       BackgroundColor="{Binding StatusColor}"
+                                       Padding="8,4"
+                                       CornerRadius="15">
+                                    <Label Text="{Binding AccountStatus}" 
+                                           FontSize="11"
+                                           TextColor="White" />
+                                </Frame>
+                            </Grid>
+                        </Frame>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

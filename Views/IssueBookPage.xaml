@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Library.Views.IssueBookPage"
+             Title="Issue Book">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <Label Text="Issue Book"
+                   FontSize="24"
+                   FontAttributes="Bold"
+                   HorizontalOptions="Center"/>
+
+            <!-- Member Search -->
+            <Frame BorderColor="#2196F3"
+                   CornerRadius="10"
+                   Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="1. Select Member"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+
+                    <SearchBar Placeholder="Search by name or email"
+                               Text="{Binding MemberSearchQuery}"
+                               SearchCommand="{Binding SearchMembersCommand}"/>
+
+                    <CollectionView ItemsSource="{Binding FoundMembers}"
+                                    HeightRequest="150"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding SelectedMember, Mode=TwoWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,2"
+                                       Padding="8"
+                                       CornerRadius="5"
+                                       BorderColor="#DDD">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding FullName}" 
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Email}" 
+                                               FontSize="12"
+                                               TextColor="Gray"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Text="{Binding SelectedMember.FullName}"
+                           IsVisible="{Binding SelectedMember != null}"
+                           TextColor="#4CAF50"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Book Search -->
+            <Frame BorderColor="#FF9800"
+                   CornerRadius="10"
+                   Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="2. Select Book"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+
+                    <SearchBar Placeholder="Search by title or ISBN"
+                               Text="{Binding BookSearchQuery}"
+                               SearchCommand="{Binding SearchBooksCommand}"/>
+
+                    <CollectionView ItemsSource="{Binding FoundBooks}"
+                                    HeightRequest="150"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding SelectedBook, Mode=TwoWay}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,2"
+                                       Padding="8"
+                                       CornerRadius="5"
+                                       BorderColor="#DDD">
+                                    <VerticalStackLayout>
+                                        <Label Text="{Binding TitleName}" 
+                                               FontAttributes="Bold"/>
+                                        <Label Text="{Binding Author}" 
+                                               FontSize="12"
+                                               TextColor="Gray"/>
+                                    </VerticalStackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                    <Label Text="{Binding SelectedBook.TitleName}"
+                           IsVisible="{Binding SelectedBook != null}"
+                           TextColor="#4CAF50"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Available Copies -->
+            <Frame IsVisible="{Binding SelectedBook != null}"
+                   BorderColor="#4CAF50"
+                   CornerRadius="10"
+                   Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="3. Select Copy"
+                           FontSize="16"
+                           FontAttributes="Bold"/>
+
+                    <Picker Title="Available Copies"
+                            ItemsSource="{Binding AvailableCopies}"
+                            ItemDisplayBinding="{Binding Barcode}"
+                            SelectedItem="{Binding SelectedCopy}"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Issue Button -->
+            <Button Text="Issue Book"
+                    Command="{Binding IssueBookCommand}"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="50"
+                    IsEnabled="{Binding CanIssue}"/>
+
+            <ActivityIndicator IsRunning="{Binding IsProcessing}"
+                               IsVisible="{Binding IsProcessing}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

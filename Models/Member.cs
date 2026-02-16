@@ -13,7 +13,25 @@ namespace Library.Models
         public DateTime RegisteredDate { get; set; }
         public DateTime CreatedAt { get; set; }
         public string Password { get; set; } = string.Empty;
-        public string ConfirmPassword { get; internal set; }
+        public string ConfirmPassword { get; set; } = string.Empty;
+        public string Role { get; set; } = "Member"; // Member or Librarian
+
+        public string FullName => $"{FirstName} {LastName}".Trim();
+        public string Initials => GetInitials();
+
+        private string GetInitials()
+        {
+            if (string.IsNullOrWhiteSpace(FirstName) && string.IsNullOrWhiteSpace(LastName))
+                return "?";
+
+            string initials = "";
+            if (!string.IsNullOrWhiteSpace(FirstName))
+                initials += FirstName[0];
+            if (!string.IsNullOrWhiteSpace(LastName))
+                initials += LastName[0];
+
+            return initials.ToUpper();
+        }
     }
 
     public class MemberAccount

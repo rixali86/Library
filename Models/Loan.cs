@@ -1,5 +1,4 @@
-﻿using Library.Models;
-using System;
+﻿using System;
 
 namespace Library.Models
 {
@@ -13,9 +12,18 @@ namespace Library.Models
         public DateTime? ReturnDatetime { get; set; }
         public string Status { get; set; } = "Checked Out"; // Checked Out, Returned, Overdue
 
-        // Navigation properties
-        public BookCopy? Copy { get; set; }
-        public Member? Member { get; set; }
+        // Navigation properties (not mapped to database)
+        public string BookTitle { get; set; } = string.Empty;
+        public string Barcode { get; set; } = string.Empty;
+        public string MemberFirstName { get; set; } = string.Empty;
+        public string MemberLastName { get; set; } = string.Empty;
+        public string MemberFullName => $"{MemberFirstName} {MemberLastName}".Trim();
+        public string BranchName { get; set; } = string.Empty;
+
+        // Calculated properties
+        public bool IsOverdue => Status == "Checked Out" && DueDatetime < DateTime.Now;
+        public int DaysOverdue => IsOverdue ? (DateTime.Now - DueDatetime).Days : 0;
+        public decimal FineAmount => DaysOverdue * 0.50m; // $0.50 per day
     }
 
     public class Penalty
