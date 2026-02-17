@@ -17,6 +17,7 @@ namespace Library.Services
         Task<DataTable> ExecuteQueryAsync(string query, Dictionary<string, object>? parameters = null);
         Task<List<T>> QueryAsync<T>(string query, Dictionary<string, object>? parameters = null) where T : class, new();
         Task<T?> QuerySingleAsync<T>(string query, Dictionary<string, object>? parameters = null) where T : class, new();
+        Task ExecuteAsync(string v, Dictionary<string, object> dictionary);
     }
 
     public class DatabaseService : IDatabaseService
@@ -116,7 +117,7 @@ namespace Library.Services
             return results.FirstOrDefault();
         }
 
-      List<T> ConvertDataTableToList<T>(DataTable dataTable) where T : class, new()
+        List<T> ConvertDataTableToList<T>(DataTable dataTable) where T : class, new()
         {
             var list = new List<T>();
             var properties = typeof(T).GetProperties();
@@ -192,6 +193,17 @@ namespace Library.Services
         private static string NormalizeColumnName(string name)
         {
             return name?.Replace("_", "", StringComparison.Ordinal).ToLowerInvariant() ?? string.Empty;
+        }
+
+        public async Task ExecuteAsync(string v, Dictionary<string, object> dictionary)
+        {
+            using var conn = new MySqlConnection(_connectionString);
+            await conn.OpenAsync();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = v;
+            foreach (var p in dictionary)
+                cmd.Parameters.AddWithValue(p.Key, p.Value);
+            await cmd.ExecuteNonQueryAsync();
         }
     }
 }

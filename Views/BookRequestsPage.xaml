@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Library.ViewModels"
+             x:Class="Library.Views.BookRequestsPage"
+             Title="Book Requests">
+
+    <Grid RowDefinitions="Auto, *">
+
+        <!-- ?? Filter bar ?? -->
+        <HorizontalStackLayout Grid.Row="0" Padding="12,8" Spacing="10">
+            <Label Text="Show:" VerticalOptions="Center" FontAttributes="Bold" />
+            <Picker SelectedItem="{Binding SelectedStatus}" WidthRequest="150">
+                <Picker.Items>
+                    <x:String>All</x:String>
+                    <x:String>Pending</x:String>
+                    <x:String>Approved</x:String>
+                    <x:String>Rejected</x:String>
+                    <x:String>Ordered</x:String>
+                </Picker.Items>
+            </Picker>
+            <ActivityIndicator IsRunning="{Binding IsLoading}"
+                               IsVisible="{Binding IsLoading}"
+                               VerticalOptions="Center"
+                               Margin="8,0,0,0" />
+        </HorizontalStackLayout>
+
+        <!-- ?? Request list ?? -->
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Requests}"
+                        SelectionMode="None">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame Margin="8,4" Padding="12" HasShadow="True" CornerRadius="8">
+                        <StackLayout Spacing="6">
+
+                            <!-- Row 1: title + status badge -->
+                            <Grid ColumnDefinitions="*, Auto">
+                                <Label Grid.Column="0"
+                                       Text="{Binding BookTitle}"
+                                       FontAttributes="Bold"
+                                       FontSize="Medium"
+                                       LineBreakMode="WordWrap" />
+
+                                <Border Grid.Column="1"
+                                        BackgroundColor="{Binding StatusColor}"
+                                        Padding="8,3"
+                                        VerticalOptions="Start"
+                                        StrokeShape="RoundRectangle 4"
+                                        Stroke="Transparent">
+                                    <Label Text="{Binding Status}"
+                                           TextColor="White"
+                                           FontSize="Micro"
+                                           FontAttributes="Bold" />
+                                </Border>
+                            </Grid>
+
+                            <!-- Author + ISBN -->
+                            <Label FontSize="Small" TextColor="DimGray">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="{Binding Author}" />
+                                        <Span Text="   |   ISBN: " TextColor="LightGray" />
+                                        <Span Text="{Binding Isbn}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <!-- Member + date -->
+                            <Label Text="{Binding MemberInfo}"
+                                   FontSize="Small"
+                                   TextColor="Gray" />
+
+                            <!-- Patron note (only shown when not empty) -->
+                            <Frame IsVisible="{Binding HasNotes}"
+                                   BackgroundColor="#F8F9FA"
+                                   BorderColor="#DEE2E6"
+                                   CornerRadius="4"
+                                   Padding="8,6"
+                                   HasShadow="False">
+                                <Label Text="{Binding Notes}"
+                                       FontSize="Small"
+                                       TextColor="DimGray"
+                                       LineBreakMode="WordWrap" />
+                            </Frame>
+
+                            <!-- Processed date (non-Pending rows) -->
+                            <Label IsVisible="{Binding IsPending, Converter={StaticResource InvertedBoolConverter}}"
+                                   FontSize="Micro"
+                                   TextColor="Gray">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <Span Text="Processed: " FontAttributes="Bold" />
+                                        <Span Text="{Binding ProcessedDate, StringFormat='{0:MMM d, yyyy}'}" />
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+
+                            <!-- Action buttons — shown only for Pending rows -->
+                            <HorizontalStackLayout IsVisible="{Binding IsPending}"
+                                                   Spacing="8"
+                                                   HorizontalOptions="End">
+                                <Button Text=" Approve"
+                                        BackgroundColor="#27AE60"
+                                        TextColor="White"
+                                        FontSize="Small"
+                                        CornerRadius="6"
+                                        Padding="12,6"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.ApproveCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                <Button Text=" Ordered"
+                                        BackgroundColor="#8E44AD"
+                                        TextColor="White"
+                                        FontSize="Small"
+                                        CornerRadius="6"
+                                        Padding="12,6"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.MarkOrderedCommand}"
+                                        CommandParameter="{Binding .}" />
+
+                                <Button Text="Reject"
+                                        BackgroundColor="#E74C3C"
+                                        TextColor="White"
+                                        FontSize="Small"
+                                        CornerRadius="6"
+                                        Padding="12,6"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                          Path=BindingContext.RejectCommand}"
+                                        CommandParameter="{Binding .}" />
+                            </HorizontalStackLayout>
+
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <Label Text="No requests found."
+                       HorizontalOptions="Center"
+                       VerticalOptions="Center"
+                       TextColor="Gray"
+                       Margin="32" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>

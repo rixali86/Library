@@ -8,18 +8,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Library.ViewModels 
+namespace Library.ViewModels
 {
+    public enum EventFilterType
+    {
+        Registered = 0,   // upcoming registrations
+        Attended = 1,   // attended
+        Missed = 2,   // registered but did not attend (past)
+        PastAll = 3    // all past events
+    }
+
     public partial class EventsAttendedViewModel : ObservableObject
     {
         private readonly IAuthService _authService;
-        private readonly ILibraryService _libraryService;
         private readonly IDatabaseService _databaseService;
 
-        public EventsAttendedViewModel(IAuthService authService, ILibraryService libraryService, IDatabaseService databaseService)
+        public EventsAttendedViewModel(IAuthService authService, IDatabaseService databaseService)
         {
             _authService = authService;
-            _libraryService = libraryService;
             _databaseService = databaseService;
 
             LoadDataCommand = new AsyncRelayCommand(LoadDataAsync);
@@ -27,7 +33,9 @@ namespace Library.ViewModels
             ViewBranchCommand = new AsyncRelayCommand<AttendedEventItem>(ViewBranchAsync);
             SearchCommand = new RelayCommand(PerformSearch);
 
-            // Start loading immediately
+            // Set backing field directly to avoid triggering LoadData before commands are ready
+            selectedFilter = EventFilterType.Attended;
+
             LoadDataCommand.Execute(null);
         }
 
@@ -36,6 +44,7 @@ namespace Library.ViewModels
         public IAsyncRelayCommand<AttendedEventItem> ViewBranchCommand { get; }
         public IRelayCommand SearchCommand { get; }
 
+        // ── Loading ──────────────────────────────────────────────────────────
         private bool isLoading;
         public bool IsLoading
         {
@@ -43,19 +52,55 @@ namespace Library.ViewModels
             set => SetProperty(ref isLoading, value);
         }
 
-        // ✅ Original list (database se aaye hue sab events)
-        private List<AttendedEventItem> attendedEvents = new();
-        public List<AttendedEventItem> AttendedEvents
+        // ── Filter ───────────────────────────────────────────────────────────
+        private EventFilterType selectedFilter;
+
+        /// <summary>Enum-typed filter — kept for any code-behind logic.</summary>
+        public EventFilterType SelectedFilter
         {
-            get => attendedEvents;
+            get => selectedFilter;
             set
             {
-                SetProperty(ref attendedEvents, value);
-                PerformSearch(); // Jab bhi data load ho, filter apply karo
+                if (SetProperty(ref selectedFilter, value))
+                {
+                    OnPropertyChanged(nameof(SelectedFilterIndex));
+                    LoadDataCommand.Execute(null);
+                }
             }
         }
 
-        // ✅ Filtered list (jo UI mein dikhega)
+        /// <summary>
+        /// Int bridge used by the XAML Picker's SelectedIndex binding.
+        /// MAUI cannot implicitly convert int ↔ enum, so this property
+        /// handles the cast explicitly and keeps both sides in sync.
+        /// </summary>
+        public int SelectedFilterIndex
+        {
+            get => (int)selectedFilter;
+            set
+            {
+                if ((int)selectedFilter != value)
+                {
+                    selectedFilter = (EventFilterType)value;
+                    OnPropertyChanged(nameof(SelectedFilterIndex));
+                    OnPropertyChanged(nameof(SelectedFilter));
+                    LoadDataCommand.Execute(null);
+                }
+            }
+        }
+
+        // ── Events ───────────────────────────────────────────────────────────
+        private List<AttendedEventItem> allEvents = new();
+        public List<AttendedEventItem> AllEvents
+        {
+            get => allEvents;
+            set
+            {
+                SetProperty(ref allEvents, value);
+                PerformSearch();
+            }
+        }
+
         private List<AttendedEventItem> filteredEvents = new();
         public List<AttendedEventItem> FilteredEvents
         {
@@ -63,7 +108,7 @@ namespace Library.ViewModels
             set => SetProperty(ref filteredEvents, value);
         }
 
-        // ✅ Search text property
+        // ── Search ───────────────────────────────────────────────────────────
         private string searchText = string.Empty;
         public string SearchText
         {
@@ -71,76 +116,114 @@ namespace Library.ViewModels
             set
             {
                 if (SetProperty(ref searchText, value))
-                {
-                    PerformSearch(); // Jab bhi text change ho, search karo
-                }
+                    PerformSearch();
             }
         }
 
-        // ✅ Search logic
         private void PerformSearch()
         {
             if (string.IsNullOrWhiteSpace(SearchText))
             {
-                // Agar search text empty hai toh sab events dikhaao
-                FilteredEvents = new List<AttendedEventItem>(AttendedEvents);
+                FilteredEvents = new List<AttendedEventItem>(AllEvents);
+                return;
             }
-            else
-            {
-                // Filter by title ya branch name
-                var searchLower = SearchText.ToLower();
-                FilteredEvents = AttendedEvents
-                    .Where(e =>
-                        e.Title.ToLower().Contains(searchLower) ||
-                        e.BranchName.ToLower().Contains(searchLower) ||
-                        (e.Description != null && e.Description.ToLower().Contains(searchLower))
-                    )
-                    .ToList();
-            }
+
+            var searchLower = SearchText.ToLower();
+
+            FilteredEvents = AllEvents
+                .Where(e =>
+                    e.Title.ToLower().Contains(searchLower) ||
+                    e.BranchName.ToLower().Contains(searchLower) ||
+                    (e.Description != null && e.Description.ToLower().Contains(searchLower))
+                )
+                .ToList();
         }
 
+        // ── Data loading ─────────────────────────────────────────────────────
         private async Task LoadDataAsync()
         {
             IsLoading = true;
+
             try
             {
                 var email = _authService?.CurrentUserEmail;
+
                 if (string.IsNullOrWhiteSpace(email))
                 {
-                    AttendedEvents = new List<AttendedEventItem>();
+                    AllEvents = new List<AttendedEventItem>();
                     return;
                 }
 
-                var memberQuery = "SELECT member_id, first_name FROM members WHERE email = @email";
-                var memberParams = new Dictionary<string, object> { { "@email", email } };
-                var member = await _databaseService.QuerySingleAsync<Member>(memberQuery, memberParams);
+                var memberQuery = "SELECT member_id FROM members WHERE email = @email";
+                var member = await _databaseService.QuerySingleAsync<Member>(
+                    memberQuery,
+                    new Dictionary<string, object> { { "@email", email } });
 
                 if (member == null)
                 {
-                    AttendedEvents = new List<AttendedEventItem>();
+                    AllEvents = new List<AttendedEventItem>();
                     return;
                 }
 
-                // Updated query - Saari past events
-                var query = @"
-                    SELECT
-                        e.event_id       AS EventId,
-                        e.branch_id      AS BranchId,
-                        e.title          AS Title,
-                        e.description    AS Description,
-                        e.start_datetime AS StartDatetime,
-                        e.end_datetime   AS EndDatetime,
-                        e.max_capacity   AS MaxCapacity,
-                        e.created_at     AS CreatedAt,
-                        b.branch_name    AS BranchName,
-                        er.registration_datetime AS RegistrationDatetime,
-                        er.attendance_status     AS AttendanceStatus
-                    FROM branch_events e
-                    JOIN branches b ON e.branch_id = b.branch_id
-                    LEFT JOIN event_registrations er ON e.event_id = er.event_id 
-                        AND er.member_id = @memberId
-                    WHERE e.end_datetime < @currentDateTime
-                    ORDER BY e.start_datetime DESC";
+                string query;
+
+                switch (SelectedFilter)
+                {
+                    case EventFilterType.Registered:
+                        query = @"
+                            SELECT e.*, b.branch_name AS BranchName,
+                                   er.registration_datetime AS RegistrationDatetime,
+                                   er.attendance_status AS AttendanceStatus
+                            FROM branch_events e
+                            JOIN branches b ON e.branch_id = b.branch_id
+                            JOIN event_registrations er ON e.event_id = er.event_id
+                            WHERE er.member_id = @memberId
+                              AND e.start_datetime > @currentDateTime
+                            ORDER BY e.start_datetime ASC";
+                        break;
+
+                    case EventFilterType.Attended:
+                        query = @"
+                            SELECT e.*, b.branch_name AS BranchName,
+                                   er.registration_datetime AS RegistrationDatetime,
+                                   er.attendance_status AS AttendanceStatus
+                            FROM branch_events e
+                            JOIN branches b ON e.branch_id = b.branch_id
+                            JOIN event_registrations er ON e.event_id = er.event_id
+                            WHERE er.member_id = @memberId
+                              AND er.attendance_status = 'Attended'
+                            ORDER BY e.start_datetime DESC";
+                        break;
+
+                    default: // PastAll
+                        query = @"
+                            SELECT e.*, b.branch_name AS BranchName,
+                                   er.registration_datetime AS RegistrationDatetime,
+                                   er.attendance_status AS AttendanceStatus
+                            FROM branch_events e
+                            JOIN branches b ON e.branch_id = b.branch_id
+                            LEFT JOIN event_registrations er
+                                 ON e.event_id = er.event_id
+                                 AND er.member_id = @memberId
+                            WHERE e.end_datetime < @currentDateTime
+                            ORDER BY e.start_datetime DESC";
+                        break;
+
+                    case EventFilterType.Missed:
+                        query = @"
+        SELECT e.*, b.branch_name AS BranchName,
+               er.registration_datetime AS RegistrationDatetime,
+               er.attendance_status AS AttendanceStatus
+        FROM branch_events e
+        JOIN branches b ON e.branch_id = b.branch_id
+        JOIN event_registrations er ON e.event_id = er.event_id
+        WHERE er.member_id = @memberId
+          AND e.start_datetime <= @currentDateTime
+          AND (er.attendance_status IS NULL 
+               OR er.attendance_status != 'Attended')
+        ORDER BY e.start_datetime DESC";
+                        break;
+                }
 
                 var parameters = new Dictionary<string, object>
                 {
@@ -149,12 +232,12 @@ namespace Library.ViewModels
                 };
 
                 var list = await _databaseService.QueryAsync<AttendedEventItem>(query, parameters);
-                AttendedEvents = list ?? new List<AttendedEventItem>();
+                AllEvents = list ?? new List<AttendedEventItem>();
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Load past events error: {ex.Message}");
-                AttendedEvents = new List<AttendedEventItem>();
+                Console.WriteLine(ex.Message);
+                AllEvents = new List<AttendedEventItem>();
             }
             finally
             {
@@ -162,6 +245,7 @@ namespace Library.ViewModels
             }
         }
 
+        // ── Navigation helpers ────────────────────────────────────────────────
         private async Task ViewEventDetailsAsync(AttendedEventItem item)
         {
             if (item == null) return;
@@ -169,8 +253,7 @@ namespace Library.ViewModels
             await Shell.Current.DisplayAlert(
                 "Event Details",
                 $"Title: {item.Title}\nBranch: {item.BranchName}\nDate: {item.StartDatetime:MMM d, yyyy}",
-                "OK"
-            );
+                "OK");
         }
 
         private async Task ViewBranchAsync(AttendedEventItem item)
@@ -180,11 +263,11 @@ namespace Library.ViewModels
             await Shell.Current.DisplayAlert(
                 "Branch Info",
                 $"Branch: {item.BranchName}",
-                "OK"
-            );
+                "OK");
         }
     }
 
+    // ── Model ─────────────────────────────────────────────────────────────────
     public class AttendedEventItem
     {
         public int EventId { get; set; }
@@ -193,10 +276,8 @@ namespace Library.ViewModels
         public string? Description { get; set; }
         public DateTime StartDatetime { get; set; }
         public DateTime EndDatetime { get; set; }
-        public int MaxCapacity { get; set; }
-        public DateTime CreatedAt { get; set; }
         public string BranchName { get; set; } = string.Empty;
-        public DateTime RegistrationDatetime { get; set; }
+        public DateTime? RegistrationDatetime { get; set; }
         public string AttendanceStatus { get; set; } = string.Empty;
     }
 }

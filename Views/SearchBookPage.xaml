@@ -1,36 +1,79 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:Library.ViewModels"
              x:Class="Library.Views.SearchBookPage"
-             Title="Search Books"
-             xmlns:viewmodels="clr-namespace:Library.ViewModels">
-
+             Title="Search Books">
 
     <StackLayout Padding="12" Spacing="12">
-        <SearchBar Placeholder="Search by title or ISBN"
+
+        <SearchBar Placeholder="Search by title, author or ISBN"
                    Text="{Binding SearchQuery}"
                    SearchCommand="{Binding SearchCommand}" />
 
-        <ActivityIndicator IsRunning="{Binding IsLoading}" IsVisible="{Binding IsLoading}" />
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}" />
 
         <CollectionView ItemsSource="{Binding Titles}"
-                        SelectionMode="Single"
-                        SelectionChangedCommand="{Binding SelectTitleCommand}"
-                        SelectionChangedCommandParameter="{Binding SelectedItem}">
+                        SelectionMode="None">
+
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame Margin="6" Padding="8" HasShadow="True">
-                        <StackLayout>
-                            <Label Text="{Binding TitleName}" FontAttributes="Bold" />
-                            <Label Text="{Binding Isbn}" FontSize="Small" TextColor="Gray" />
-                            <Label Text="{Binding Publisher}" FontSize="Micro" TextColor="DarkGray" />
-                            <Label Text="{Binding Author}" FontSize="Micro" TextColor="DarkGray" />
-                            <Label Text="{Binding PublicationYear}" FontSize="Micro" TextColor="DarkGray" />
-                            
-                        </StackLayout>
+                    <Frame Margin="4,4" Padding="10" HasShadow="True" CornerRadius="8">
+                        <Grid ColumnDefinitions="*, Auto"
+                              ColumnSpacing="8">
+
+                            <!-- ── Book info ── -->
+                            <StackLayout Grid.Column="0" Spacing="2">
+                                <Label Text="{Binding TitleName}"
+                                       FontAttributes="Bold"
+                                       FontSize="Medium"
+                                       LineBreakMode="WordWrap" />
+                                <Label Text="{Binding Author}"
+                                       FontSize="Small"
+                                       TextColor="DimGray"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Text="{Binding Isbn}"
+                                       FontSize="Micro"
+                                       TextColor="Gray" />
+                                <Label Text="{Binding Publisher}"
+                                       FontSize="Micro"
+                                       TextColor="DarkGray" />
+                                <Label Text="{Binding PublicationYear}"
+                                       FontSize="Micro"
+                                       TextColor="DarkGray" />
+                            </StackLayout>
+
+                            <!-- ── Request button ── -->
+                            <Button Grid.Column="1"
+                                    Text="Request"
+                                    BackgroundColor="#2E75B6"
+                                    TextColor="White"
+                                    FontSize="Small"
+                                    CornerRadius="6"
+                                    Padding="10,6"
+                                    VerticalOptions="Center"
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}},
+                                                      Path=BindingContext.RequestBookCommand}"
+                                    CommandParameter="{Binding .}" />
+                        </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <StackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                             Padding="32" Spacing="10">
+                    <Label Text="📚" FontSize="48" HorizontalOptions="Center" />
+                    <Label Text="No books found"
+                           FontSize="Medium" TextColor="Gray"
+                           HorizontalOptions="Center" />
+                    <Label Text="Try a different title, author or ISBN."
+                           FontSize="Small" TextColor="LightGray"
+                           HorizontalOptions="Center" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+
         </CollectionView>
     </StackLayout>
 </ContentPage>
