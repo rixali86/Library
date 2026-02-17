@@ -20,42 +20,112 @@
         <ScrollView>
             <VerticalStackLayout Spacing="0" Padding="0">
 
-                <!-- Header -->
-                <Grid BackgroundColor="{StaticResource LibrarianColor}" 
+                <!-- ── Header ── -->
+                <Grid BackgroundColor="{StaticResource LibrarianColor}"
                       Padding="20,30,20,40">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
 
-                    <VerticalStackLayout Grid.Row="0" Spacing="8">
-                        <Label Text="Librarian Dashboard" 
-                               FontSize="28"
-                               FontAttributes="Bold"
-                               TextColor="White" />
-                        <Label Text="Manage your library efficiently" 
-                               FontSize="14"
-                               TextColor="White"
-                               Opacity="0.9" />
-                        <Label Text="{Binding LastUpdated, StringFormat='Last updated: {0:hh:mm tt}'}"
-                               FontSize="12"
-                               TextColor="White"
-                               Opacity="0.7" />
-                    </VerticalStackLayout>
+                    <!-- Title + bell icon row -->
+                    <Grid Grid.Row="0" ColumnDefinitions="*, Auto">
+
+                        <VerticalStackLayout Grid.Column="0" Spacing="8">
+                            <Label Text="Librarian Dashboard"
+                                   FontSize="28" FontAttributes="Bold" TextColor="White" />
+                            <Label Text="Manage your library efficiently"
+                                   FontSize="14" TextColor="White" Opacity="0.9" />
+                            <Label Text="{Binding LastUpdated, StringFormat='Last updated: {0:hh:mm tt}'}"
+                                   FontSize="12" TextColor="White" Opacity="0.7" />
+                        </VerticalStackLayout>
+
+                        <!-- 🔔 Notification bell with red badge -->
+                        <Grid Grid.Column="1"
+                              WidthRequest="48" HeightRequest="48"
+                              VerticalOptions="Start"
+                              Margin="0,4,0,0"
+                              >
+
+                            <!-- Tappable bell -->
+                            <ImageButton Source="bell.png"
+                                         WidthRequest="30" HeightRequest="30"
+                                         VerticalOptions="Center"
+                                         HorizontalOptions="Center"
+                                         BackgroundColor="black"
+                                             />
+
+                            <!-- Red badge — only visible when pending > 0 -->
+                            <Border IsVisible="{Binding HasPendingRequests}"
+                                    BackgroundColor="black"
+                                    WidthRequest="20" HeightRequest="20"
+                                    HorizontalOptions="End"
+                                    VerticalOptions="Start"
+                                    StrokeShape="RoundRectangle 10"
+                                    Stroke="Transparent">
+                                <Label Text="{Binding PendingRequestCount}"
+                                       TextColor="White"
+                                       FontSize="10"
+                                       FontAttributes="Bold"
+                                       HorizontalOptions="Center"
+                                       VerticalOptions="Center" />
+                            </Border>
+                        </Grid>
+                    </Grid>
                 </Grid>
 
-                <!-- Stats Cards -->
-                <Grid Padding="20" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" 
-                      ColumnSpacing="15" RowSpacing="15" BackgroundColor="#F5F5F5">
+                <!-- ── Pending Requests Banner ── -->
+                <!-- Visible only when there are pending requests -->
+                <Frame IsVisible="{Binding HasPendingRequests}"
+                       BackgroundColor="#FFF8E1"
+                       BorderColor="#FFB300"
+                       CornerRadius="0"
+                       Padding="16,12"
+                       HasShadow="False"
+                       Margin="0">
+                    <Grid ColumnDefinitions="Auto, *, Auto">
+
+                        <Label Grid.Column="0"
+                               Text="🔔"
+                               FontSize="20"
+                               VerticalOptions="Center"
+                               Margin="0,0,10,0" />
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                            <Label Text="{Binding PendingRequestLabel}"
+                                   FontAttributes="Bold"
+                                   FontSize="14"
+                                   TextColor="#E65100" />
+                            <Label Text="Tap to review and issue books"
+                                   FontSize="12"
+                                   TextColor="#BF360C" />
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="2"
+                                Text="Review"
+                                Command="{Binding ViewPendingRequestsCommand}"
+                                BackgroundColor="#FF9800"
+                                TextColor="White"
+                                FontSize="12"
+                                CornerRadius="6"
+                                Padding="12,6"
+                                VerticalOptions="Center" />
+                    </Grid>
+                </Frame>
+
+                <!-- ── Stats Cards ── -->
+                <Grid Padding="20"
+                      ColumnDefinitions="*,*"
+                      RowDefinitions="Auto,Auto,Auto"
+                      ColumnSpacing="15" RowSpacing="15"
+                      BackgroundColor="#F5F5F5">
 
                     <!-- Total Members -->
                     <Frame Grid.Row="0" Grid.Column="0"
-                           BackgroundColor="White"
-                           Padding="15"
-                           CornerRadius="12">
+                           BackgroundColor="White" Padding="15" CornerRadius="12">
                         <VerticalStackLayout Spacing="5">
-                            <Label Text="Members" FontSize="24" />
-                            <Label Text="{Binding TotalMembers}" 
+                            <Label Text="👥" FontSize="24" />
+                            <Label Text="{Binding TotalMembers}"
                                    FontSize="24" FontAttributes="Bold"
                                    TextColor="{StaticResource LibrarianColor}" />
                             <Label Text="Total Members" FontSize="12" TextColor="#666" />
@@ -64,12 +134,10 @@
 
                     <!-- Active Loans -->
                     <Frame Grid.Row="0" Grid.Column="1"
-                           BackgroundColor="White"
-                           Padding="15"
-                           CornerRadius="12">
+                           BackgroundColor="White" Padding="15" CornerRadius="12">
                         <VerticalStackLayout Spacing="5">
-                            <Label Text="Loans" FontSize="24" />
-                            <Label Text="{Binding ActiveLoans}" 
+                            <Label Text="📖" FontSize="24" />
+                            <Label Text="{Binding ActiveLoans}"
                                    FontSize="24" FontAttributes="Bold"
                                    TextColor="#2196F3" />
                             <Label Text="Active Loans" FontSize="12" TextColor="#666" />
@@ -78,12 +146,10 @@
 
                     <!-- Overdue Loans -->
                     <Frame Grid.Row="1" Grid.Column="0"
-                           BackgroundColor="White"
-                           Padding="15"
-                           CornerRadius="12">
+                           BackgroundColor="White" Padding="15" CornerRadius="12">
                         <VerticalStackLayout Spacing="5">
-                            <Label Text="Overdue" FontSize="24" />
-                            <Label Text="{Binding OverdueLoans}" 
+                            <Label Text="⚠️" FontSize="24" />
+                            <Label Text="{Binding OverdueLoans}"
                                    FontSize="24" FontAttributes="Bold"
                                    TextColor="{StaticResource DangerColor}" />
                             <Label Text="Overdue" FontSize="12" TextColor="#666" />
@@ -92,22 +158,48 @@
 
                     <!-- Available Books -->
                     <Frame Grid.Row="1" Grid.Column="1"
-                           BackgroundColor="White"
-                           Padding="15"
-                           CornerRadius="12">
+                           BackgroundColor="White" Padding="15" CornerRadius="12">
                         <VerticalStackLayout Spacing="5">
-                            <Label Text="Avail Books" FontSize="24" />
-                            <Label Text="{Binding AvailableBooks}" 
+                            <Label Text="📚" FontSize="24" />
+                            <Label Text="{Binding AvailableBooks}"
                                    FontSize="24" FontAttributes="Bold"
                                    TextColor="#4CAF50" />
                             <Label Text="Available Books" FontSize="12" TextColor="#666" />
                         </VerticalStackLayout>
                     </Frame>
+
+                    <!-- Pending Requests card -->
+                    <Frame Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"
+                           BackgroundColor="White" Padding="15" CornerRadius="12">
+                        <Grid ColumnDefinitions="Auto, *, Auto">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4"
+                                                 VerticalOptions="Center"
+                                                 Margin="0,0,12,0">
+                                <Label Text="📋" FontSize="28" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label Text="{Binding PendingRequestCount}"
+                                       FontSize="24" FontAttributes="Bold"
+                                       TextColor="#FF9800" />
+                                <Label Text="Pending Book Requests" FontSize="12" TextColor="#666" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="2"
+                                    Text="View All"
+                                    Command="{Binding ViewPendingRequestsCommand}"
+                                    BackgroundColor="#FF9800"
+                                    TextColor="White"
+                                    FontSize="12"
+                                    CornerRadius="6"
+                                    Padding="10,6"
+                                    VerticalOptions="Center"
+                                    IsVisible="{Binding HasPendingRequests}" />
+                        </Grid>
+                    </Frame>
                 </Grid>
 
-                <!-- Quick Actions -->
+                <!-- ── Quick Actions ── -->
                 <VerticalStackLayout Padding="20" Spacing="12">
-                    <Label Text="Quick Actions" 
+                    <Label Text="Quick Actions"
                            FontSize="18" FontAttributes="Bold" />
 
                     <Grid ColumnDefinitions="*,*,*" ColumnSpacing="12">
@@ -117,14 +209,12 @@
                                 BackgroundColor="{StaticResource LibrarianColor}"
                                 TextColor="White"
                                 CornerRadius="8" />
-
                         <Button Grid.Column="1"
                                 Text="Return Book"
                                 Command="{Binding QuickReturnBookCommand}"
                                 BackgroundColor="#2196F3"
                                 TextColor="White"
                                 CornerRadius="8" />
-
                         <Button Grid.Column="2"
                                 Text="Reports"
                                 Command="{Binding ViewAllReportsCommand}"
@@ -134,17 +224,16 @@
                     </Grid>
                 </VerticalStackLayout>
 
-                <!-- Recent Loans -->
+                <!-- ── Recent Loans ── -->
                 <VerticalStackLayout Padding="20" Spacing="12" BackgroundColor="#F5F5F5">
                     <HorizontalStackLayout Spacing="10">
-                        <Label Text="Recent Loans" 
+                        <Label Text="Recent Loans"
                                FontSize="18" FontAttributes="Bold" />
-                        <Label Text="{Binding RecentLoans.Count}" 
-                               FontSize="14" 
+                        <Label Text="{Binding RecentLoans.Count}"
+                               FontSize="14"
                                BackgroundColor="{StaticResource LibrarianColor}"
                                TextColor="White"
-                               Padding="8,2"
-                                />
+                               Padding="8,2" />
                     </HorizontalStackLayout>
 
                     <CollectionView ItemsSource="{Binding RecentLoans}">
@@ -153,12 +242,12 @@
                                 <Frame Padding="12" Margin="0,0,0,8" CornerRadius="8">
                                     <Grid ColumnDefinitions="*,Auto">
                                         <VerticalStackLayout Grid.Column="0" Spacing="4">
-                                            <Label Text="{Binding BookTitle}" 
+                                            <Label Text="{Binding BookTitle}"
                                                    FontAttributes="Bold" />
-                                            <Label Text="{Binding MemberFirstName}" 
+                                            <Label Text="{Binding MemberFirstName}"
                                                    FontSize="12" TextColor="#666" />
-                                            <Label Text="{Binding DueDatetime, StringFormat='Due: {0:MMM dd}'}" 
-                                                   FontSize="12" 
+                                            <Label Text="{Binding DueDatetime, StringFormat='Due: {0:MMM dd}'}"
+                                                   FontSize="12"
                                                    TextColor="{Binding DueDatetime, Converter={StaticResource DueDateColorConverter}}" />
                                         </VerticalStackLayout>
                                         <Button Grid.Column="1"
@@ -175,6 +264,7 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
+
             </VerticalStackLayout>
         </ScrollView>
     </RefreshView>

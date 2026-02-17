@@ -71,6 +71,7 @@ namespace Library
             builder.Services.AddTransient<ReturnBookViewModel>();
 
             builder.Services.AddTransient<ReportsViewModel>();
+            builder.Services.AddTransient<BookRequestsViewModel>();
 
             // Register Views - Member Views
             builder.Services.AddTransient<LoginPage>();
@@ -99,6 +100,7 @@ namespace Library
             builder.Services.AddTransient<ReturnBookPage>();
 
             builder.Services.AddTransient<ReportsPage>();
+            builder.Services.AddTransient<BookRequestsPage>();
 
             // Register Shells
             builder.Services.AddSingleton<AuthShell>();

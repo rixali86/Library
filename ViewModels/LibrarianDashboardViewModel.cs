@@ -33,6 +33,17 @@ namespace Library.ViewModels
         [ObservableProperty]
         private decimal totalFines;
 
+        // ── Pending book requests notification ────────────────────────────────
+        [ObservableProperty]
+        private int pendingRequestCount;
+
+        [ObservableProperty]
+        private bool hasPendingRequests;
+
+        [ObservableProperty]
+        private string pendingRequestLabel = string.Empty;
+        // ─────────────────────────────────────────────────────────────────────
+
         [ObservableProperty]
         private ObservableCollection<Loan> recentLoans = new();
 
@@ -65,7 +76,6 @@ namespace Library.ViewModels
             ViewLoanDetailsCommand = new AsyncRelayCommand<Loan>(ViewLoanDetailsAsync);
             ViewMemberDetailsCommand = new AsyncRelayCommand<Member>(ViewMemberDetailsAsync);
 
-            // Load data on initialization
             Task.Run(async () => await LoadDashboardDataAsync());
         }
 
@@ -79,12 +89,11 @@ namespace Library.ViewModels
                 // Get current librarian info
                 var currentUser = await _authService.GetCurrentUserAsync();
                 if (currentUser != null)
-                {
                     UserName = currentUser.FirstName;
-                }
 
-                // Load statistics
+                // Load statistics + pending requests badge
                 await LoadStatisticsAsync();
+                await LoadPendingRequestsCountAsync();
 
                 // Load recent data
                 await LoadRecentLoansAsync();
@@ -97,9 +106,7 @@ namespace Library.ViewModels
             {
                 Console.WriteLine($"Dashboard load error: {ex.Message}");
                 await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    "Failed to load dashboard data",
-                    "OK");
+                    "Error", "Failed to load dashboard data", "OK");
             }
             finally
             {
@@ -107,17 +114,46 @@ namespace Library.ViewModels
             }
         }
 
+        // ── Pending requests badge ────────────────────────────────────────────
+
+        private async Task LoadPendingRequestsCountAsync()
+        {
+            try
+            {
+                const string sql = "SELECT COUNT(*) FROM book_requests WHERE status = 'Pending';";
+                var scalar = await _databaseService.ExecuteScalarAsync(sql,
+                    new Dictionary<string, object>());
+
+                PendingRequestCount = scalar is not null ? Convert.ToInt32(scalar) : 0;
+                HasPendingRequests = PendingRequestCount > 0;
+                PendingRequestLabel = PendingRequestCount == 1
+                    ? "1 new book request"
+                    : $"{PendingRequestCount} new book requests";
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"PendingRequests count error: {ex.Message}");
+            }
+        }
+
+        // ── Navigate to requests page ─────────────────────────────────────────
+
+        [RelayCommand]
+        private async Task ViewPendingRequestsAsync()
+        {
+            await Shell.Current.GoToAsync("BookRequests");
+        }
+
+        // ── Statistics ────────────────────────────────────────────────────────
+
         private async Task LoadStatisticsAsync()
         {
-            // Total members
             var memberCountQuery = "SELECT COUNT(*) FROM members WHERE role = 'Member'";
             TotalMembers = Convert.ToInt32(await _databaseService.ExecuteScalarAsync(memberCountQuery));
 
-            // Active loans
             var activeLoansQuery = "SELECT COUNT(*) FROM loans WHERE status = 'Checked Out'";
             ActiveLoans = Convert.ToInt32(await _databaseService.ExecuteScalarAsync(activeLoansQuery));
 
-            // Overdue loans
             var overdueLoansQuery = @"
 SELECT COUNT(*) 
 FROM loans 
@@ -125,7 +161,6 @@ WHERE status = 'Checked Out'
 AND due_datetime < NOW()";
             OverdueLoans = Convert.ToInt32(await _databaseService.ExecuteScalarAsync(overdueLoansQuery));
 
-            // Available books
             var availableBooksQuery = @"
 SELECT COUNT(*) 
 FROM book_copies bc
@@ -133,10 +168,11 @@ LEFT JOIN loans l ON bc.copy_id = l.copy_id AND l.status = 'Checked Out'
 WHERE l.loan_id IS NULL";
             AvailableBooks = Convert.ToInt32(await _databaseService.ExecuteScalarAsync(availableBooksQuery));
 
-            // Total fines collected (placeholder - you'll need a fines table)
             var finesQuery = "SELECT COALESCE(SUM(penalty_amount), 0) FROM penalties WHERE resolved = 1";
             TotalFines = Convert.ToDecimal(await _databaseService.ExecuteScalarAsync(finesQuery));
         }
+
+        // ── Recent loans ──────────────────────────────────────────────────────
 
         private async Task LoadRecentLoansAsync()
         {
@@ -144,33 +180,30 @@ WHERE l.loan_id IS NULL";
 SELECT l.*, 
        t.title_name AS BookTitle,
        m.first_name AS MemberFirstName,
-       m.last_name AS MemberLastName
+       m.last_name  AS MemberLastName
 FROM loans l
-JOIN book_copies bc ON l.copy_id = bc.copy_id
-JOIN titles t ON bc.title_id = t.title_id
-JOIN members m ON l.member_id = m.member_id
+JOIN book_copies bc ON l.copy_id    = bc.copy_id
+JOIN titles      t  ON bc.title_id  = t.title_id
+JOIN members     m  ON l.member_id  = m.member_id
 ORDER BY l.checkout_datetime DESC
 LIMIT 5";
 
             var loans = await _databaseService.QueryAsync<Loan>(query);
             RecentLoans.Clear();
-
             if (loans != null)
-            {
                 foreach (var loan in loans)
-                {
                     RecentLoans.Add(loan);
-                }
-            }
         }
+
+        // ── Recent members ────────────────────────────────────────────────────
 
         private async Task LoadRecentMembersAsync()
         {
             var query = @"
-SELECT member_id AS MemberId,
-       first_name AS FirstName,
-       last_name AS LastName,
-       email AS Email,
+SELECT member_id       AS MemberId,
+       first_name      AS FirstName,
+       last_name       AS LastName,
+       email           AS Email,
        registered_date AS RegisteredDate
 FROM members
 WHERE role = 'Member'
@@ -179,20 +212,17 @@ LIMIT 5";
 
             var members = await _databaseService.QueryAsync<Member>(query);
             RecentMembers.Clear();
-
             if (members != null)
-            {
                 foreach (var member in members)
-                {
                     RecentMembers.Add(member);
-                }
-            }
         }
+
+        // ── Popular books ─────────────────────────────────────────────────────
 
         private async Task LoadPopularBooksAsync()
         {
             var query = @"
-SELECT bc.*, t.title_name, COUNT(l.loan_id) as LoanCount
+SELECT bc.*, t.title_name, COUNT(l.loan_id) AS LoanCount
 FROM book_copies bc
 JOIN titles t ON bc.title_id = t.title_id
 LEFT JOIN loans l ON bc.copy_id = l.copy_id
@@ -202,56 +232,37 @@ LIMIT 5";
 
             var books = await _databaseService.QueryAsync<BookCopy>(query);
             PopularBooks.Clear();
-
             if (books != null)
-            {
                 foreach (var book in books)
-                {
                     PopularBooks.Add(book);
-                }
-            }
         }
+
+        // ── Navigation ────────────────────────────────────────────────────────
 
         private async Task ViewLoanDetailsAsync(Loan loan)
         {
             if (loan == null) return;
-
-            var parameters = new Dictionary<string, object>
-            {
-                ["loan"] = loan
-            };
-
-            await Shell.Current.GoToAsync("LoanDetails", parameters);
+            await Shell.Current.GoToAsync("LoanDetails",
+                new Dictionary<string, object> { ["loan"] = loan });
         }
 
         private async Task ViewMemberDetailsAsync(Member member)
         {
             if (member == null) return;
-
-            var parameters = new Dictionary<string, object>
-            {
-                ["member"] = member
-            };
-
-            await Shell.Current.GoToAsync("MemberLoans", parameters);
+            await Shell.Current.GoToAsync("MemberLoans",
+                new Dictionary<string, object> { ["member"] = member });
         }
 
         [RelayCommand]
-        private async Task QuickIssueBookAsync()
-        {
+        private async Task QuickIssueBookAsync() =>
             await Shell.Current.GoToAsync("IssueBook");
-        }
 
         [RelayCommand]
-        private async Task QuickReturnBookAsync()
-        {
+        private async Task QuickReturnBookAsync() =>
             await Shell.Current.GoToAsync("ReturnBook");
-        }
 
         [RelayCommand]
-        private async Task ViewAllReportsAsync()
-        {
+        private async Task ViewAllReportsAsync() =>
             await Shell.Current.GoToAsync("Reports");
-        }
     }
 }

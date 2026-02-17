@@ -114,6 +114,11 @@
                       Title="Events" />
     </FlyoutItem>
 
+    <FlyoutItem>
+        <ShellContent Route="BookRequests" ContentTemplate="{DataTemplate views:BookRequestsPage}"
+                      Title=" Book Requests"/>
+    </FlyoutItem>
+   
     <FlyoutItem Title="Settings" Icon="settings.png">
         <ShellContent Route="LibrarySettings"
                       ContentTemplate="{DataTemplate views:LibrarySettingsPage}"

@@ -74,6 +74,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("OverdueBooks", typeof(OverdueBooksPage));
         Routing.RegisterRoute("ReturnBook", typeof(ReturnBookPage));
         Routing.RegisterRoute("Reports", typeof(ReportsPage));
+        Routing.RegisterRoute("BookRequests", typeof(BookRequestsPage));
 
     }
 
