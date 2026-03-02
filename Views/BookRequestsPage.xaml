@@ -96,7 +96,7 @@
                                 </Label.FormattedText>
                             </Label>
 
-                            <!-- Action buttons — shown only for Pending rows -->
+                            <!-- Action buttons ï¿½ shown only for Pending rows -->
                             <HorizontalStackLayout IsVisible="{Binding IsPending}"
                                                    Spacing="8"
                                                    HorizontalOptions="End">

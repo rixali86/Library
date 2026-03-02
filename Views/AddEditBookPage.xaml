@@ -1,91 +1,82 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:helpers="clr-namespace:Library.Helpers"
              x:Class="Library.Views.AddEditBookPage"
              Title="{Binding PageTitle}"
              BackgroundColor="{DynamicResource PageBackgroundColor}">
 
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <helpers:NotEmptyConverter x:Key="NotEmptyConverter" />
-            <Color x:Key="Primary">#2196F3</Color>
-            <Color x:Key="Success">#4CAF50</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
-
     <ScrollView>
         <VerticalStackLayout Padding="16" Spacing="20">
 
-            <!-- Book Details Section -->
+            <!-- Book Details -->
             <Frame Padding="16" CornerRadius="12" HasShadow="False" BorderColor="#EEE">
                 <VerticalStackLayout Spacing="16">
                     <Label Text="Book Information" FontSize="18" FontAttributes="Bold" />
 
-                    <!-- Title -->
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Title *" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Book.TitleName}"
-                               Placeholder="Enter book title"
-                               FontSize="16" />
+                        <Label Text="Title *" FontSize="14" TextColor="Gray"/>
+                        <Entry Text="{Binding Book.TitleName}" Placeholder="Enter title"/>
                     </VerticalStackLayout>
 
-                    <!-- ISBN -->
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="ISBN" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Book.Isbn}"
-                               Placeholder="Enter ISBN"
-                               FontSize="16" />
+                        <Label Text="ISBN" FontSize="14" TextColor="Gray"/>
+                        <Entry Text="{Binding Book.Isbn}" Placeholder="Enter ISBN"/>
                     </VerticalStackLayout>
 
-                    <!-- Publisher -->
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Publisher" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Book.Publisher}"
-                               Placeholder="Enter publisher name"
-                               FontSize="16" />
+                        <Label Text="Publisher" FontSize="14" TextColor="Gray"/>
+                        <Entry Text="{Binding Book.Publisher}" Placeholder="Publisher"/>
                     </VerticalStackLayout>
 
-                    <!-- Publication Year -->
                     <VerticalStackLayout Spacing="4">
-                        <Label Text="Publication Year" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Book.PublicationYear}"
-                               Placeholder="Enter year"
-                               Keyboard="Numeric"
-                               FontSize="16" />
+                        <Label Text="Publication Year" FontSize="14" TextColor="Gray"/>
+                        <Entry Text="{Binding Book.PublicationYear}" Placeholder="Year" Keyboard="Numeric"/>
                     </VerticalStackLayout>
+
+                    <VerticalStackLayout  Spacing="4">
+                 
+                        <Label Text="Created At" FontSize="14" TextColor="Gray" />
+                        <DatePicker 
+Date="{Binding Book.UpdatedAt}"
+                            IsEnabled="True"
+                            
+Format="dd MMM yyyy" />
+                        
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="4"    >
+                        <Label Text="Last Updated" FontSize="14" TextColor="Gray" />
+                        <DatePicker 
+Date="{Binding Book.UpdatedAt}" IsEnabled="False"
+Format="dd MMM yyyy" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Extra Information" FontSize="14" TextColor="Gray"/>
+                        <Label Text="{Binding Book.ExtraInfo}" TextColor="Black" BackgroundColor="#F0F0F0" Padding="8" />
+                    </VerticalStackLayout>
+                    <Button 
+    Text="Add Extra Info" 
+    Command="{Binding AddExtraInfoCommand}" 
+    BackgroundColor="#FF9800" 
+    TextColor="White"
+    HeightRequest="50"/>
                 </VerticalStackLayout>
             </Frame>
 
             <!-- Authors Section -->
             <Frame Padding="16" CornerRadius="12" HasShadow="False" BorderColor="#EEE">
-                <VerticalStackLayout Spacing="16">
+                <VerticalStackLayout Spacing="12">
                     <HorizontalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
-                        <Label Text="Authors" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
-                        <Button Text="+ Add Author"
-                                Command="{Binding AddAuthorCommand}"
-                                BackgroundColor="{StaticResource Primary}"
-                                TextColor="White"
-                                FontSize="12"
-                                CornerRadius="5"
-                                HeightRequest="30" />
+                        <Label Text="Authors" FontSize="16" FontAttributes="Bold"/>
+                        <Button Text="+ Add Author" Command="{Binding AddAuthorCommand}" BackgroundColor="#2196F3" TextColor="White" HeightRequest="30"/>
                     </HorizontalStackLayout>
-
                     <CollectionView ItemsSource="{Binding Authors}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid ColumnDefinitions="*,Auto" Padding="0,4">
-                                    <Entry Grid.Column="0"
-                                           Text="{Binding AuthorName}"
-                                           Placeholder="Author name"
-                                           FontSize="14" />
-                                    <Button Grid.Column="1"
-                                            Text="?"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveAuthorCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="Transparent"
-                                            TextColor="Red"
-                                            FontSize="18" />
+                                    <Entry Grid.Column="0" Text="{Binding AuthorName}" Placeholder="Author name"/>
+                                    <Button Grid.Column="1" Text="❌" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveAuthorCommand}" CommandParameter="{Binding .}" BackgroundColor="Transparent" TextColor="Red"/>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -93,45 +84,20 @@
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Book Copies Section -->
+            <!-- Copies Section -->
             <Frame Padding="16" CornerRadius="12" HasShadow="False" BorderColor="#EEE">
-                <VerticalStackLayout Spacing="16">
+                <VerticalStackLayout Spacing="12">
                     <HorizontalStackLayout Spacing="8" HorizontalOptions="FillAndExpand">
-                        <Label Text="Copies" FontSize="18" FontAttributes="Bold" VerticalOptions="Center" />
-                        <Label Text="{Binding Copies.Count}" 
-                               BackgroundColor="{StaticResource Primary}"
-                               TextColor="White"
-                               Padding="8,2"
-                               CornerRadius="10" />
-                        <Button Text="+ Add Copy"
-                                Command="{Binding AddCopyCommand}"
-                                BackgroundColor="{StaticResource Success}"
-                                TextColor="White"
-                                FontSize="12"
-                                CornerRadius="5"
-                                HeightRequest="30" />
+                        <Label Text="Copies" FontSize="16" FontAttributes="Bold"/>
+                        <Button Text="+ Add Copy" Command="{Binding AddCopyCommand}" BackgroundColor="#4CAF50" TextColor="White" HeightRequest="30"/>
                     </HorizontalStackLayout>
-
                     <CollectionView ItemsSource="{Binding Copies}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
-                                <Grid ColumnDefinitions="*,*,Auto" Padding="0,4" ColumnSpacing="8">
-                                    <Entry Grid.Column="0"
-                                           Text="{Binding Barcode}"
-                                           Placeholder="Barcode"
-                                           FontSize="12" />
-                                    <Picker Grid.Column="1"
-                                            Title="Condition"
-                                            ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ConditionOptions}"
-                                            SelectedItem="{Binding ConditionStatus}"
-                                            FontSize="12" />
-                                    <Button Grid.Column="2"
-                                            Text="?"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCopyCommand}"
-                                            CommandParameter="{Binding .}"
-                                            BackgroundColor="Transparent"
-                                            TextColor="Red"
-                                            FontSize="18" />
+                                <Grid ColumnDefinitions="*,Auto,Auto" Padding="0,4" ColumnSpacing="8">
+                                    <Entry Grid.Column="0" Text="{Binding Barcode}" Placeholder="Barcode"/>
+                                    <Picker Grid.Column="1" Title="Condition" ItemsSource="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ConditionOptions}" SelectedItem="{Binding ConditionStatus}"/>
+                                    <Button Grid.Column="2" Text="❌" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.RemoveCopyCommand}" CommandParameter="{Binding .}" BackgroundColor="Transparent" TextColor="Red"/>
                                 </Grid>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
@@ -141,38 +107,19 @@
 
             <!-- Branch Selection -->
             <Frame Padding="16" CornerRadius="12" HasShadow="False" BorderColor="#EEE">
-                <VerticalStackLayout Spacing="16">
-                    <Label Text="Assign to Branch *" FontSize="18" FontAttributes="Bold" />
-
-                    <Picker Title="Select Branch"
-                            ItemsSource="{Binding Branches}"
-                            ItemDisplayBinding="{Binding BranchName}"
-                            SelectedItem="{Binding SelectedBranch}"
-                            FontSize="16" />
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Assign Branch *" FontSize="16" FontAttributes="Bold"/>
+                    <Picker Title="Select Branch" ItemsSource="{Binding Branches}" ItemDisplayBinding="{Binding BranchName}" SelectedItem="{Binding SelectedBranch}"/>
                 </VerticalStackLayout>
             </Frame>
 
             <!-- Action Buttons -->
             <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
-                <Button Grid.Column="0"
-                        Text="Cancel"
-                        Command="{Binding CancelCommand}"
-                        BackgroundColor="Gray"
-                        TextColor="White"
-                        CornerRadius="8"
-                        HeightRequest="50" />
-
-                <Button Grid.Column="1"
-                        Text="{Binding SaveButtonText}"
-                        Command="{Binding SaveCommand}"
-                        BackgroundColor="{StaticResource Success}"
-                        TextColor="White"
-                        CornerRadius="8"
-                        HeightRequest="50" />
+                <Button Grid.Column="0" Text="Cancel" Command="{Binding CancelCommand}" BackgroundColor="Gray" TextColor="White" HeightRequest="50"/>
+                <Button Grid.Column="1" Text="{Binding SaveButtonText}" Command="{Binding SaveCommand}" BackgroundColor="#4CAF50" TextColor="White" HeightRequest="50"/>
             </Grid>
 
-            <ActivityIndicator IsRunning="{Binding IsSaving}"
-                               IsVisible="{Binding IsSaving}" />
+            <ActivityIndicator IsRunning="{Binding IsSaving}" IsVisible="{Binding IsSaving}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>

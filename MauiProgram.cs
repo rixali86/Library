@@ -41,6 +41,7 @@ namespace Library
             builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
             builder.Services.AddSingleton<IAuthService, AuthService>();
             builder.Services.AddSingleton<ILibraryService, LibraryService>();
+           
 
             // Register ViewModels - Member ViewModels
             builder.Services.AddTransient<LoginViewModel>();
@@ -86,14 +87,14 @@ namespace Library
 
 
             // Register Views - Librarian Views
-            builder.Services.AddTransient<LibrarianDashboardPage>();
-            builder.Services.AddTransient<ManageBooksPage>();
-            builder.Services.AddTransient<AddEditBookViewModel>();
-            builder.Services.AddTransient<IssueBookPage>();
-            builder.Services.AddTransient<ManageMembersPage>();
-            builder.Services.AddTransient<ManageMembersPage>();
-            builder.Services.AddTransient<FinesPage>();
-            builder.Services.AddTransient<LibrarySettingsPage>();
+            builder.Services.AddTransient<LibrarianDashboardPage>(); //1
+            builder.Services.AddTransient<ManageBooksPage>();  //2
+            builder.Services.AddTransient<AddEditBookViewModel>(); //3 add work only
+            builder.Services.AddTransient<IssueBookPage>();  // 4 issue button and availanle copies is not shown
+            builder.Services.AddTransient<ManageMembersPage>(); // 5 only display do not delete
+  
+            builder.Services.AddTransient<FinesPage>(); 
+            builder.Services.AddTransient<LibrarySettingsPage>(); 
             builder.Services.AddTransient<MemberLoansPage>();
             builder.Services.AddTransient<MemberProfilePage>();
             builder.Services.AddTransient<OverdueBooksPage>();

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 
 namespace Library.Models
 {
@@ -15,6 +16,8 @@ namespace Library.Models
         public string Password { get; set; } = string.Empty;
         public string ConfirmPassword { get; set; } = string.Empty;
         public string Role { get; set; } = "Member"; // Member or Librarian
+
+        public ObservableCollection<MemberMetadata> MetaRows { get; set; } = new();
 
         public string FullName => $"{FirstName} {LastName}".Trim();
         public string Initials => GetInitials();
@@ -41,5 +44,6 @@ namespace Library.Models
         public string MembershipTier { get; set; } = string.Empty;
         public string Status { get; set; } = "Active"; // Active, Suspended, Expired, Flagged
         public DateTime? ExpirationDate { get; set; }
+
     }
 }

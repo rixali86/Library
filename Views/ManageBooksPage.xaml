@@ -66,21 +66,21 @@
 
         <!-- Summary Stats -->
         <Grid Grid.Row="3" ColumnDefinitions="*,*,*" ColumnSpacing="8">
-            <Frame Grid.Column="0" Padding="8" CornerRadius="8" BackgroundColor="{StaticResource Primary}10">
+            <Frame Grid.Column="0" Padding="8" CornerRadius="8" BackgroundColor="{StaticResource Primary}">
                 <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
                     <Label Text="Total Books" FontSize="12" TextColor="Gray" />
                     <Label Text="{Binding TotalBooks}" FontSize="18" FontAttributes="Bold" />
                 </VerticalStackLayout>
             </Frame>
 
-            <Frame Grid.Column="1" Padding="8" CornerRadius="8" BackgroundColor="{StaticResource Success}10">
+            <Frame Grid.Column="1" Padding="8" CornerRadius="8" BackgroundColor="{StaticResource Success}">
                 <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
                     <Label Text="Available" FontSize="12" TextColor="Gray" />
                     <Label Text="{Binding AvailableBooks}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Success}" />
                 </VerticalStackLayout>
             </Frame>
 
-            <Frame Grid.Column="2" Padding="8" CornerRadius="8" BackgroundColor="{StaticResource Warning}10">
+            <Frame Grid.Column="2" Padding="8" CornerRadius="8" BackgroundColor="{StaticResource Warning}">
                 <VerticalStackLayout Spacing="4" HorizontalOptions="Center">
                     <Label Text="Checked Out" FontSize="12" TextColor="Gray" />
                     <Label Text="{Binding CheckedOutBooks}" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Warning}" />
@@ -118,10 +118,22 @@
                                     <HorizontalStackLayout Spacing="8">
                                         <Label Text="{Binding Isbn}" FontSize="12" TextColor="Gray" />
                                         <Label Text="�" FontSize="12" TextColor="Gray" />
-                                        <Label Text="{Binding PublicationYear}" FontSize="12" TextColor="Gray" />
+                                        <Label Text="{Binding PublicationYear}" FontSize="12" TextColor="Gray"  />
                                     </HorizontalStackLayout>
-                                    <Label Text="{Binding Publisher}" FontSize="12" TextColor="Gray" />
+                                    <Label Text="{Binding Publisher}" FontSize="12" TextColor="Gray"  />
+                                   <!-- Metadata -->
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Label Text="{Binding CreatedAt, StringFormat='Added: {0:dd MMM yyyy}'}"
+               FontSize="11"
+               TextColor="#888" BackgroundColor="red" />
+
+                                        <Label Text="{Binding UpdatedAt, StringFormat='Updated: {0:dd MMM yyyy}'}"
+               FontSize="11"
+               TextColor="#888"  BackgroundColor="red"/>
+                                    </HorizontalStackLayout>
                                 </VerticalStackLayout>
+                                
+                                
 
                                 <Frame Grid.Column="1"
                                        BackgroundColor="{Binding StatusColor}"

@@ -55,6 +55,7 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("MemberDashboard", typeof(DashboardPage));
         Routing.RegisterRoute("Search", typeof(SearchBookPage));
         Routing.RegisterRoute("Branches", typeof(BranchesPage));
+            Routing.RegisterRoute("MemberLoans", typeof(MemberLoansPage));
         Routing.RegisterRoute("BranchDetails", typeof(BranchDetailsPage));
         Routing.RegisterRoute("Events", typeof(EventsAttendedPage));
         Routing.RegisterRoute("Profile", typeof(MemberProfilePage));
@@ -69,7 +70,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute("EditBook", typeof(AddEditBookPage));
         Routing.RegisterRoute("Fines", typeof(FinesPage));
         Routing.RegisterRoute("LibrarySettings", typeof(LibrarySettingsPage));
-        Routing.RegisterRoute("MemberLoans", typeof(MemberLoansPage));
         Routing.RegisterRoute("MemberProfile", typeof(MemberProfilePage));
         Routing.RegisterRoute("OverdueBooks", typeof(OverdueBooksPage));
         Routing.RegisterRoute("ReturnBook", typeof(ReturnBookPage));

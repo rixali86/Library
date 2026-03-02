@@ -360,4 +360,40 @@ public class UserSession
             UserId = null;
         }
     }
+
+    public interface IAuthorizationService
+    {
+        Task<bool> HasPermissionAsync(string permissionKey);
+    }
+
+    public class AuthorizationService : IAuthorizationService
+    {
+        private readonly IAuthService _authService;
+        private readonly IDatabaseService _databaseService;
+
+        public AuthorizationService(IAuthService authService, IDatabaseService databaseService)
+        {
+            _authService = authService;
+            _databaseService = databaseService;
+        }
+
+        public async Task<bool> HasPermissionAsync(string permissionKey)
+        {
+            var query = @"
+            SELECT COUNT(*) 
+            FROM role_permissions rp
+            JOIN roles r ON rp.role_id = r.role_id
+            JOIN permissions p ON rp.permission_id = p.permission_id
+            WHERE r.role_name = @roleName AND p.permission_key = @permissionKey";
+
+            var parameters = new Dictionary<string, object>
+        {
+            { "@roleName", _authService.CurrentUserRole },
+            { "@permissionKey", permissionKey }
+        };
+
+            var count = Convert.ToInt32(await _databaseService.ExecuteScalarAsync(query, parameters));
+            return count > 0;
+        }
+    }
 }

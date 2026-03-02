@@ -264,7 +264,35 @@
                         </CollectionView.ItemTemplate>
                     </CollectionView>
                 </VerticalStackLayout>
+                <VerticalStackLayout Padding="20" Spacing="12">
+                    <Label Text="Popular Books" FontSize="18" FontAttributes="Bold" />
+                    <CollectionView ItemsSource="{Binding PopularBooks}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="12" Margin="0,0,0,8" CornerRadius="8" BackgroundColor="White">
+                                    <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto,Auto" ColumnSpacing="8">
 
+                                        <!-- Book Title -->
+                                        <Label Grid.Row="0" Grid.Column="0" Text="{Binding TitleName}" FontAttributes="Bold" />
+
+                                        <!-- Extra Info -->
+                                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding ExtraInfo}" TextColor="#666" FontSize="12" />
+
+                                        <!-- Add/Edit Note Button -->
+                                        <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
+                            Text="Add/Edit Note"
+                            Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.AddExtraInfoCommand}"
+                            CommandParameter="{Binding .}"
+                            BackgroundColor="#4CAF50"
+                            TextColor="White"
+                            CornerRadius="6"
+                            HeightRequest="40"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
             </VerticalStackLayout>
         </ScrollView>
     </RefreshView>

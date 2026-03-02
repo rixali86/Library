@@ -71,11 +71,18 @@
         <ShellContent Route="MemberDashboard"
                       ContentTemplate="{DataTemplate views:DashboardPage}" />
     </FlyoutItem>
-
+    
+    
     <FlyoutItem Title="Search Books" Icon="book.png"
                 IsVisible="{Binding IsMember}">
         <ShellContent Route="Search"
                       ContentTemplate="{DataTemplate views:SearchBookPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Branches" Icon="loan.png"
+               IsVisible="{Binding IsMember}">
+        <ShellContent Route="Branches"
+                             ContentTemplate="{DataTemplate views:BranchesPage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Events" Icon="events.png"
@@ -83,12 +90,17 @@
         <ShellContent Route="Events"
                       ContentTemplate="{DataTemplate views:EventsAttendedPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="Members Loans" Icon="loan.png"
+                IsVisible="{Binding IsMember}">
+        <ShellContent Route="Loan"
+                              ContentTemplate="{DataTemplate views:MemberLoansPage}"/>
+    </FlyoutItem>
 
     <FlyoutItem Title="Account" Icon="profile.png"
                 IsVisible="{Binding IsMember}">
         <ShellContent Route="Profile"
                       ContentTemplate="{DataTemplate views:MemberProfilePage}" />
-        <ShellContent Route="Settings"
+        <ShellContent Route="Setting"
                       ContentTemplate="{DataTemplate views:SettingsPage}" />
     </FlyoutItem>
 

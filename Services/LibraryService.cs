@@ -18,6 +18,12 @@ namespace Library.Services
         Task<bool> ReturnBookAsync(int loanId);
         Task<List<BranchEvent>> GetUpcomingEventsAsync(int branchId = 0);
         Task<bool> RegisterForEventAsync(int eventId, int memberId);
+
+        Task<List<MemberMetadata>> GetMemberMetadataAsync(int memberId);
+        Task<bool> AddMemberMetadataAsync(int memberId, string key, string value, string performedBy, string userRole);
+        Task<bool> UpdateMemberMetadataAsync(int metaId, string newValue, string performedBy, string userRole);
+        Task<bool> DeleteMemberMetadataAsync(int metaId, string performedBy, string userRole);
+
     }
 
     public class LibraryService : ILibraryService
@@ -229,5 +235,109 @@ namespace Library.Services
                 return false;
             }
         }
+
+        public async Task<List<MemberMetadata>> GetMemberMetadataAsync(int memberId)
+        {
+            var query = "SELECT * FROM member_metadata WHERE member_id = @memberId ORDER BY created_at DESC";
+            var parameters = new Dictionary<string, object> { { "@memberId", memberId } };
+            return await _databaseService.QueryAsync<MemberMetadata>(query, parameters);
+        }
+
+        public async Task<bool> AddMemberMetadataAsync(int memberId, string key, string value, string performedBy, string userRole)
+        {
+            if (userRole != "Librarian")
+                throw new UnauthorizedAccessException("Only librarians can add metadata.");
+
+            var query = "INSERT INTO member_metadata (member_id, meta_key, meta_value) VALUES (@memberId, @key, @value)";
+            var parameters = new Dictionary<string, object>
+        {
+            { "@memberId", memberId },
+            { "@key", key },
+            { "@value", value }
+        };
+
+            await _databaseService.ExecuteNonQueryAsync(query, parameters);
+
+            // Fetch newly created meta_id
+            var metaId = Convert.ToInt32(await _databaseService.ExecuteScalarAsync("SELECT LAST_INSERT_ID();", null));
+
+            var meta = new MemberMetadata
+            {
+                MetaId = metaId,
+                MemberId = memberId,
+                MetaKey = key,
+                MetaValue = value
+            };
+
+            await LogMetadataActionAsync(meta, "Added", performedBy, oldValue: null);
+
+            return true;
+        }
+
+        public async Task<bool> UpdateMemberMetadataAsync(int metaId, string newValue, string performedBy, string userRole)
+        {
+            if (userRole != "Librarian")
+                throw new UnauthorizedAccessException("Only librarians can edit metadata.");
+
+            var meta = await _databaseService.QuerySingleAsync<MemberMetadata>(
+                "SELECT * FROM member_metadata WHERE meta_id = @metaId",
+                new Dictionary<string, object> { { "@metaId", metaId } });
+
+            if (meta == null) return false;
+
+            var oldValue = meta.MetaValue;
+
+            var query = "UPDATE member_metadata SET meta_value = @value WHERE meta_id = @metaId";
+            await _databaseService.ExecuteNonQueryAsync(query, new Dictionary<string, object>
+        {
+            { "@value", newValue },
+            { "@metaId", metaId }
+        });
+
+            meta.MetaValue = newValue;
+            await LogMetadataActionAsync(meta, "Edited", performedBy, oldValue);
+
+            return true;
+        }
+
+        public async Task<bool> DeleteMemberMetadataAsync(int metaId, string performedBy, string userRole)
+        {
+            if (userRole != "Librarian")
+                throw new UnauthorizedAccessException("Only librarians can delete metadata.");
+
+            var meta = await _databaseService.QuerySingleAsync<MemberMetadata>(
+                "SELECT * FROM member_metadata WHERE meta_id = @metaId",
+                new Dictionary<string, object> { { "@metaId", metaId } });
+
+            if (meta == null) return false;
+
+            await _databaseService.ExecuteNonQueryAsync(
+                "DELETE FROM member_metadata WHERE meta_id = @metaId",
+                new Dictionary<string, object> { { "@metaId", metaId } });
+
+            await LogMetadataActionAsync(meta, "Deleted", performedBy, oldValue: meta.MetaValue);
+
+            return true;
+        }
+
+        private async Task LogMetadataActionAsync(MemberMetadata meta, string action, string performedBy, string oldValue)
+        {
+            var query = @"
+            INSERT INTO member_metadata_audit (meta_id, member_id, action, old_value, new_value, performed_by)
+            VALUES (@metaId, @memberId, @action, @oldValue, @newValue, @performedBy)";
+
+            await _databaseService.ExecuteNonQueryAsync(query, new Dictionary<string, object>
+        {
+            { "@metaId", meta.MetaId },
+            { "@memberId", meta.MemberId },
+            { "@action", action },
+            { "@oldValue", oldValue ?? "" },
+            { "@newValue", meta.MetaValue ?? "" },
+            { "@performedBy", performedBy }
+        });
+        }
+
+        // TODO: Keep your existing LibraryService methods like GetMemberLoansAsync, ReturnBookAsync, etc.
     }
+
 }
